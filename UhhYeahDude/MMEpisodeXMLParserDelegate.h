@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class MMEpisode;
+@class MMMedia;
 
 @interface MMEpisodeXMLParserDelegate : NSObject <NSXMLParserDelegate> {
     NSMutableArray *currentEpisodes;
-    MMEpisode *currentEpisode;
+    MMMedia *currentEpisode;
     NSString *currentProperty;
     NSString *currentValue;
 }

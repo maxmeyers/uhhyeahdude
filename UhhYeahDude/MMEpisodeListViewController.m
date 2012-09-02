@@ -7,64 +7,66 @@
 //
 
 #import "MMEpisodeListViewController.h"
-#import "MMEpisodeViewController.h"
+#import "MMMediaViewController.h"
 #import "MMEpisodeDataSource.h"
 #import "MMOverlayViewController.h"
 #import "ODRefreshControl.h"
-#import "MMEpisodeTableViewCell.h"
-#import "MMEpisode.h"
+#import "MMListTableViewCell.h"
+#import "MMMedia.h"
 #import "MMMoviePlayerViewController.h"
 #import "MMAppDelegate.h"
-#import "MMNavigationViewController.h"
+#import "UIImageView+WebCache.h"
+
+#define EPISODES [[MMEpisodeDataSource sharedDataSource] episodes]
+#define SEARCH_EPISODES [[MMEpisodeDataSource sharedDataSource] searchEpisodes]
 
 @implementation MMEpisodeListViewController
 @synthesize searchBar;
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-}
 
 #pragma mark - View lifecycle
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"EpisodeListToEpisodeView"]){
-        MMEpisodeViewController *evc = [segue destinationViewController];
-        evc.episode = [sender episode];
+        MMMediaViewController *evc = [segue destinationViewController];
+        evc.media = [sender media];
     }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.dataSource = [MMEpisodeDataSource sharedDataSource];
     [[MMEpisodeDataSource sharedDataSource] registerForUpdates:self];
-    if (NSClassFromString(@"UIRefreshControl")) {
-        self.refreshControl = [UIRefreshControl new];
-        self.theRefreshControl = self.refreshControl;
-    } else {
-        self.theRefreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
-    }
-    [self.theRefreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+//    if (NSClassFromString(@"UIRefreshControl")) {
+//        self.refreshControl = [UIRefreshControl new];
+//        self.theRefreshControl = self.refreshControl;
+//    } else {
+//        self.theRefreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
+//    }
+//    [self.theRefreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     self.nowPlayingButton = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = nil;
+}
+
+#pragma mark -
+#pragma mark MMEpisodeDataSourceListener methods
+
+- (void) startingUpdate
+{
+    self.loading = YES;
 }
 
 - (void) episodesWereUpdated
 {
     [self.tableView reloadData];
+    self.loading = NO;
     if (self.refreshing) {
         self.refreshing = NO;
         [self.theRefreshControl performSelector:@selector(endRefreshing)];
     }
 }
 
-- (void) refresh
-{
-    self.refreshing = YES;
-    [[MMEpisodeDataSource sharedDataSource] load];
-}
+#pragma mark -
+#pragma mark View Cycle
 
 - (void)viewDidUnload
 {
@@ -76,27 +78,12 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if ([MPVC episode]) {
+    if ([MPVC media]) {
         self.navigationItem.rightBarButtonItem = self.nowPlayingButton;        
     } else {
         self.navigationItem.rightBarButtonItem = nil;
     }
     [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -110,21 +97,13 @@
 }
 
 #pragma mark -
-#pragma mark UITableViewDelegate Methods
-
-//- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    NSLog(@"boom");
-//}
-
-#pragma mark -
 #pragma mark UISearchBarDelegate Methods
 
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar {
 	
 	//This method is called again when the user clicks back from teh detail view.
 	//So the overlay is displayed on the results, which is something we do not want to happen.
-	if([(MMEpisodeDataSource *)self.tableView.dataSource searching]) {
+	if(self.searching) {
         return;    
     }
 	
@@ -147,8 +126,7 @@
 	
 	[self.tableView insertSubview:ovController.view aboveSubview:self.parentViewController.view];
 	
-    [(MMEpisodeDataSource *)self.tableView.dataSource setSearching:YES];
-    [(MMEpisodeDataSource *)self.tableView.dataSource setLetUserSelectRow:NO];
+    self.searching = YES;
 	self.tableView.scrollEnabled = NO;
 	
 	//Add the done button.
@@ -160,14 +138,12 @@
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {	
 	if ([searchText length] > 0) {
 		[ovController.view removeFromSuperview];
-        [(MMEpisodeDataSource *)self.tableView.dataSource setSearching:YES];
-        [(MMEpisodeDataSource *)self.tableView.dataSource setLetUserSelectRow:YES];
+        self.searching = YES;
 		self.tableView.scrollEnabled = YES;
-        [(MMEpisodeDataSource *)self.tableView.dataSource search:searchText];
+        [[MMEpisodeDataSource sharedDataSource] search:searchText];
 	} else {
 		[self.tableView insertSubview:ovController.view aboveSubview:self.parentViewController.view];
-        [(MMEpisodeDataSource *)self.tableView.dataSource setSearching:NO];
-        [(MMEpisodeDataSource *)self.tableView.dataSource setLetUserSelectRow:NO];
+        self.searching = NO;
 		self.tableView.scrollEnabled = NO;
 	}
 	
@@ -184,8 +160,7 @@
 	searchBar.text = @"";
 	[searchBar resignFirstResponder];
 	
-    [(MMEpisodeDataSource *)self.tableView.dataSource setLetUserSelectRow:YES];
-    [(MMEpisodeDataSource *)self.tableView.dataSource setSearching:NO];
+    self.searching = NO;
 	self.navigationItem.rightBarButtonItem = nil;
 	self.tableView.scrollEnabled = YES;
 	
@@ -195,8 +170,66 @@
 	[self.tableView reloadData];
 }
 
+#pragma mark -
+#pragma mark actions
 
-- (IBAction)nowPlayingAction:(id)sender {
+- (IBAction) refresh:(id) sender
+{
+    self.refreshing = YES;
+    [[MMEpisodeDataSource sharedDataSource] load];
+}
+
+- (IBAction)nowPlayingAction:(id)sender
+{
     [self.navigationController pushViewController:MPVC animated:YES];
 }
+
+#pragma  mark -
+#pragma  mark UITableViewDatasource methods
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (self.searching) {
+        return SEARCH_EPISODES.count;
+    } else {
+        return (EPISODES) ? EPISODES.count : 0;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"EpisodeCell";
+        
+    MMListTableViewCell *cell = (MMListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    MMMedia *episode;
+    
+    if (self.searching) {
+        episode = [SEARCH_EPISODES objectAtIndex:[indexPath row]];
+    } else {
+        episode = [EPISODES objectAtIndex:[indexPath row]];
+    }
+    
+    if (episode) {
+        cell.media = episode;
+        [cell.titleLabel setText:episode.title];
+        int fontSize = 17;
+        if ([episode componentLength] > 5) {
+            fontSize = 13;
+        }
+        UIFont *font = [UIFont fontWithName:cell.titleLabel.font.fontName size:fontSize];
+        cell.titleLabel.font = font;
+        
+        cell.titleLabel.adjustsFontSizeToFitWidth = YES;
+        [cell.durationLabel setText:episode.duration];
+        
+        [cell setImage];
+    }
+    
+    return cell;
+}
+
 @end

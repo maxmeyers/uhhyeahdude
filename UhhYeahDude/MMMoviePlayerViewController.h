@@ -8,10 +8,11 @@
 
 #import <MediaPlayer/MediaPlayer.h>
 
-@class MMEpisode;
+@class MMMedia;
 
 @interface MMMoviePlayerViewController : MPMoviePlayerViewController
 
-@property MMEpisode *episode;
+@property UIImageView *backgroundImageView;
+@property MMMedia *media;
 
 @end

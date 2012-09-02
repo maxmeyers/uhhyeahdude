@@ -7,8 +7,11 @@
 //
 
 #import "MMEpisodeXMLParserDelegate.h"
-#import "MMEpisode.h"
+#import "MMMedia.h"
 #import "MMEpisodeDataSource.h"
+#import "MMAppDelegate.h"
+
+#include "TargetConditionals.h"
 
 @implementation MMEpisodeXMLParserDelegate
 
@@ -21,7 +24,8 @@
 {
     // If we haven't started an episode
     if (!currentEpisode && [elementName isEqualToString:@"item"]) {
-        currentEpisode = [MMEpisode new];
+        currentEpisode = [MMMedia new];
+        [currentEpisode setMediaType:Episode];
     }
     // If we've already started an episode
     else if (currentEpisode) {
@@ -56,7 +60,10 @@
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
     [[MMEpisodeDataSource sharedDataSource] setEpisodes:currentEpisodes];
-    [NSKeyedArchiver archiveRootObject:currentEpisodes toFile:@"/Users/maxmeyers/Desktop/Episodes.bin"];
+    [NSKeyedArchiver archiveRootObject:currentEpisodes toFile:EPISODES_BIN];
+#ifdef TARGET_IPHONE_SIMULATOR
+    [NSKeyedArchiver archiveRootObject:currentEpisodes toFile:@"/Users/maxmeyers/Desktop/episodes.bin"];
+#endif
     currentEpisodes = nil;
 }
 

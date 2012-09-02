@@ -8,6 +8,7 @@
 
 #import "MMAppDelegate.h"
 #import "MMEpisodeDataSource.h"
+#import "MMVideoDataSource.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMoviePlayerViewController.h"
 
@@ -17,9 +18,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:EPISODES_BIN]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"episodes" ofType:@"bin"] toPath:EPISODES_BIN error:nil];
+    }
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:IMAGES_DIRECTORY]) {
+        NSError *error;
+        [[NSFileManager defaultManager] copyItemAtPath:[NSString stringWithFormat:@"%@/images/", [[NSBundle mainBundle] resourcePath]] toPath:IMAGES_DIRECTORY error:&error];
+    }
+    
     // Override point for customization after application launch.
+    [[MMEpisodeDataSource sharedDataSource] setEpisodes:[NSKeyedUnarchiver unarchiveObjectWithFile:EPISODES_BIN]];
     [[MMEpisodeDataSource sharedDataSource] load];
-    self.mpvc = [[MMMoviePlayerViewController alloc] init];
+    [[MMVideoDataSource sharedDataSource] load];
     
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     
@@ -42,6 +53,11 @@ static NSString *_applicationDocumentsDirectory = nil;
         _applicationDocumentsDirectory = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     }
     return _applicationDocumentsDirectory;
+}
+
+- (void) applicationDidBecomeActive:(UIApplication *)application
+{
+    [[MMEpisodeDataSource sharedDataSource] load];
 }
 
 @end
