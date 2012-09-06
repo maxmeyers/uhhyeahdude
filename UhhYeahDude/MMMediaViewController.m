@@ -88,12 +88,6 @@
     [super viewDidUnload];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 - (IBAction)downloadButtonAction:(id)sender {
     if (!self.downloading && !self.downloaded) {
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.media.url]];

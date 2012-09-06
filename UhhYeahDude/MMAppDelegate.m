@@ -21,6 +21,10 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:EPISODES_BIN]) {
         [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"episodes" ofType:@"bin"] toPath:EPISODES_BIN error:nil];
     }
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath:VIDEOS_BIN]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"videos" ofType:@"bin"] toPath:VIDEOS_BIN error:nil];
+    }
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:IMAGES_DIRECTORY]) {
         NSError *error;
@@ -30,6 +34,8 @@
     // Override point for customization after application launch.
     [[MMEpisodeDataSource sharedDataSource] setEpisodes:[NSKeyedUnarchiver unarchiveObjectWithFile:EPISODES_BIN]];
     [[MMEpisodeDataSource sharedDataSource] load];
+    
+    [[MMVideoDataSource sharedDataSource] setSections:[NSKeyedUnarchiver unarchiveObjectWithFile:VIDEOS_BIN]];
     [[MMVideoDataSource sharedDataSource] load];
     
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
@@ -55,7 +61,7 @@ static NSString *_applicationDocumentsDirectory = nil;
     return _applicationDocumentsDirectory;
 }
 
-- (void) applicationDidBecomeActive:(UIApplication *)application
+-(void) applicationWillEnterForeground:(UIApplication *)application
 {
     [[MMEpisodeDataSource sharedDataSource] load];
 }

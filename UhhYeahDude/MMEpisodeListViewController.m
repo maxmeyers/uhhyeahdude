@@ -34,7 +34,6 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
     [[MMEpisodeDataSource sharedDataSource] registerForUpdates:self];
 //    if (NSClassFromString(@"UIRefreshControl")) {
 //        self.refreshControl = [UIRefreshControl new];
@@ -45,6 +44,9 @@
 //    [self.theRefreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     self.nowPlayingButton = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = nil;
+    
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:38/255.0 green:38/255.0 blue:38/255.0 alpha:1.0];
+    [super viewDidLoad];
 }
 
 #pragma mark -
@@ -188,11 +190,12 @@
 #pragma  mark UITableViewDatasource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 0) return 1;
     if (self.searching) {
         return SEARCH_EPISODES.count;
     } else {
@@ -203,10 +206,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"EpisodeCell";
-        
-    MMListTableViewCell *cell = (MMListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    MMMedia *episode;
     
+    if (indexPath.section == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
+        cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        return cell;
+    }
+    
+    MMListTableViewCell *cell = (MMListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (indexPath.row % 2 == 0) {
+        cell.backgroundColor = [UIColor colorWithRed:184/255.0 green:184/255.0 blue:184/255.0 alpha:1.0];
+    } else {
+        cell.backgroundColor = [UIColor colorWithRed:213/255.0 green:213/255.0 blue:213/255.0 alpha:1.0];
+    }
+    
+    MMMedia *episode;
     if (self.searching) {
         episode = [SEARCH_EPISODES objectAtIndex:[indexPath row]];
     } else {
@@ -214,6 +229,7 @@
     }
     
     if (episode) {
+        cell.frameView.layer.cornerRadius = 5;
         cell.media = episode;
         [cell.titleLabel setText:episode.title];
         int fontSize = 17;

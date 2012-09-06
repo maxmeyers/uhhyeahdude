@@ -18,8 +18,14 @@
 
 - (void) observeNotification:(NSNotification *)notification
 {
-    if ([notification.name isEqualToString:@"MPMoviePlayerDidEnterFullscreenNotification"] || [notification.name isEqualToString:@"MPMoviePlayerDidExitFullscreenNotification"]) {
+    if ([notification.name isEqualToString:@"MPMoviePlayerDidEnterFullscreenNotification"]) {
         [self setBackgroundImage];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    }
+        
+    if ([notification.name isEqualToString:@"MPMoviePlayerDidExitFullscreenNotification"]) {
+        [self setBackgroundImage];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
 }
 

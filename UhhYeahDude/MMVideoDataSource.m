@@ -11,6 +11,7 @@
 #import "AFNetworking.h"
 #import "MMMedia.h"
 #import "MMVideoSection.h"
+#import "MMAppDelegate.h"
 
 @implementation MMVideoDataSource
 
@@ -65,12 +66,17 @@ static MMVideoDataSource *_sharedDataSource;
                     [item setMediaType:SethsCorner];
                     [item setTitle:[itemDict objectForKey:@"title"]];
                     [item setUrl:[itemDict objectForKey:@"url"]];
+                    [item setDuration:[itemDict objectForKey:@"duration"]];
                     [tempItems addObject:item];
                 }
                 [section setItems:[NSArray arrayWithArray:tempItems]];
                 [tempSections addObject:section];
             }
             self.sections = [NSArray arrayWithArray:tempSections];
+            [NSKeyedArchiver archiveRootObject:self.sections toFile:VIDEOS_BIN];
+#ifdef TARGET_IPHONE_SIMULATOR
+            [NSKeyedArchiver archiveRootObject:self.sections toFile:@"/Users/maxmeyers/Desktop/videos.bin"];
+#endif
         }
         [self performSelectorOnMainThread:@selector(updateListenersOfUpdate) withObject:nil waitUntilDone:NO];
     }];

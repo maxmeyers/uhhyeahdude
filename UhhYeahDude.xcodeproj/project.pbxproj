@@ -29,6 +29,7 @@
 		77E5D29214E224DC00FAA1A3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77E5D26514E224DB00FAA1A3 /* Foundation.framework */; };
 		77E5D29A14E224DC00FAA1A3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77E5D29814E224DC00FAA1A3 /* InfoPlist.strings */; };
 		77E5D29D14E224DC00FAA1A3 /* UhhYeahDudeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 77E5D29C14E224DC00FAA1A3 /* UhhYeahDudeTests.m */; };
+		BD2D27C215F58DFC0020292D /* header.png in Resources */ = {isa = PBXBuildFile; fileRef = BD2D27C115F58DFC0020292D /* header.png */; };
 		BD3AEDB115F2E1AB0067A8EB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BD3AEDB015F2E1AB0067A8EB /* Default.png */; };
 		BD43C21F15DF6B3200D58466 /* MMOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD43C21E15DF6B3200D58466 /* MMOverlayViewController.m */; };
 		BD49D6C715DF3E24001FD7F4 /* MMEpisodeXMLParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD49D6C615DF3E24001FD7F4 /* MMEpisodeXMLParserDelegate.m */; };
@@ -69,7 +70,14 @@
 		BDCEF20E15F3FB9700280AAB /* MMVideoSection.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCEF20D15F3FB9700280AAB /* MMVideoSection.m */; };
 		BDCEF21415F3FD1900280AAB /* MMVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCEF21315F3FD1900280AAB /* MMVideoListViewController.m */; };
 		BDCEF27B15F4095900280AAB /* images in Resources */ = {isa = PBXBuildFile; fileRef = BDCEF27A15F4095900280AAB /* images */; };
+		BDD5A4C415F5CB85001A5D51 /* sethscorner.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD5A4C315F5CB85001A5D51 /* sethscorner.png */; };
+		BDD5A4CA15F5D55D001A5D51 /* videos.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD5A4C915F5D55D001A5D51 /* videos.png */; };
+		BDD5A4CD15F5D673001A5D51 /* episodes.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD5A4CB15F5D672001A5D51 /* episodes.png */; };
+		BDD5A4CE15F5D673001A5D51 /* episodes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD5A4CC15F5D673001A5D51 /* episodes@2x.png */; };
+		BDD5A4D015F5D67B001A5D51 /* videos@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD5A4CF15F5D67B001A5D51 /* videos@2x.png */; };
+		BDD5A4D415F5DB70001A5D51 /* tv.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD5A4D315F5DB70001A5D51 /* tv.png */; };
 		BDEEDDEF15F41D1A000B58A8 /* episodes.bin in Resources */ = {isa = PBXBuildFile; fileRef = BDEEDDEE15F41D1A000B58A8 /* episodes.bin */; };
+		BDEEDDF315F430E2000B58A8 /* videos.bin in Resources */ = {isa = PBXBuildFile; fileRef = BDEEDDF215F430E2000B58A8 /* videos.bin */; };
 		BDF77F5815F3EB3700FA64FC /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF77F4715F3EB3700FA64FC /* SDImageCache.m */; };
 		BDF77F5915F3EB3700FA64FC /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF77F4B15F3EB3700FA64FC /* SDWebImageDecoder.m */; };
 		BDF77F5A15F3EB3700FA64FC /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF77F4D15F3EB3700FA64FC /* SDWebImageDownloader.m */; };
@@ -121,6 +129,7 @@
 		77E5D29914E224DC00FAA1A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		77E5D29B14E224DC00FAA1A3 /* UhhYeahDudeTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UhhYeahDudeTests.h; sourceTree = "<group>"; };
 		77E5D29C14E224DC00FAA1A3 /* UhhYeahDudeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UhhYeahDudeTests.m; sourceTree = "<group>"; };
+		BD2D27C115F58DFC0020292D /* header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header.png; sourceTree = "<group>"; };
 		BD3AEDB015F2E1AB0067A8EB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		BD43C21D15DF6B3200D58466 /* MMOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMOverlayViewController.h; sourceTree = "<group>"; };
 		BD43C21E15DF6B3200D58466 /* MMOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMOverlayViewController.m; sourceTree = "<group>"; };
@@ -195,7 +204,14 @@
 		BDCEF21215F3FD1900280AAB /* MMVideoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMVideoListViewController.h; sourceTree = "<group>"; };
 		BDCEF21315F3FD1900280AAB /* MMVideoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMVideoListViewController.m; sourceTree = "<group>"; };
 		BDCEF27A15F4095900280AAB /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		BDD5A4C315F5CB85001A5D51 /* sethscorner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sethscorner.png; sourceTree = "<group>"; };
+		BDD5A4C915F5D55D001A5D51 /* videos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videos.png; sourceTree = "<group>"; };
+		BDD5A4CB15F5D672001A5D51 /* episodes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = episodes.png; sourceTree = "<group>"; };
+		BDD5A4CC15F5D673001A5D51 /* episodes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "episodes@2x.png"; sourceTree = "<group>"; };
+		BDD5A4CF15F5D67B001A5D51 /* videos@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "videos@2x.png"; sourceTree = "<group>"; };
+		BDD5A4D315F5DB70001A5D51 /* tv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tv.png; sourceTree = "<group>"; };
 		BDEEDDEE15F41D1A000B58A8 /* episodes.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = episodes.bin; sourceTree = "<group>"; };
+		BDEEDDF215F430E2000B58A8 /* videos.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = videos.bin; sourceTree = "<group>"; };
 		BDF77F4615F3EB3700FA64FC /* SDImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCache.h; sourceTree = "<group>"; };
 		BDF77F4715F3EB3700FA64FC /* SDImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDImageCache.m; sourceTree = "<group>"; };
 		BDF77F4815F3EB3700FA64FC /* SDImageCacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCacheDelegate.h; sourceTree = "<group>"; };
@@ -336,7 +352,15 @@
 		BD3AEDB415F2E85D0067A8EB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BDD5A4D315F5DB70001A5D51 /* tv.png */,
+				BDD5A4C915F5D55D001A5D51 /* videos.png */,
+				BDD5A4CF15F5D67B001A5D51 /* videos@2x.png */,
+				BDD5A4C315F5CB85001A5D51 /* sethscorner.png */,
+				BD2D27C115F58DFC0020292D /* header.png */,
+				BDEEDDF215F430E2000B58A8 /* videos.bin */,
 				BDEEDDEE15F41D1A000B58A8 /* episodes.bin */,
+				BDD5A4CB15F5D672001A5D51 /* episodes.png */,
+				BDD5A4CC15F5D673001A5D51 /* episodes@2x.png */,
 				BDCEF27A15F4095900280AAB /* images */,
 				77E5D27E14E224DB00FAA1A3 /* first.png */,
 				77E5D28014E224DB00FAA1A3 /* first@2x.png */,
@@ -567,6 +591,14 @@
 				BD3AEDB115F2E1AB0067A8EB /* Default.png in Resources */,
 				BDCEF27B15F4095900280AAB /* images in Resources */,
 				BDEEDDEF15F41D1A000B58A8 /* episodes.bin in Resources */,
+				BDEEDDF315F430E2000B58A8 /* videos.bin in Resources */,
+				BD2D27C215F58DFC0020292D /* header.png in Resources */,
+				BDD5A4C415F5CB85001A5D51 /* sethscorner.png in Resources */,
+				BDD5A4CA15F5D55D001A5D51 /* videos.png in Resources */,
+				BDD5A4CD15F5D673001A5D51 /* episodes.png in Resources */,
+				BDD5A4CE15F5D673001A5D51 /* episodes@2x.png in Resources */,
+				BDD5A4D015F5D67B001A5D51 /* videos@2x.png in Resources */,
+				BDD5A4D415F5DB70001A5D51 /* tv.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

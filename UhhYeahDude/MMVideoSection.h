@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MMVideoSection : NSObject
+@interface MMVideoSection : NSObject <NSCoding>
 
 @property NSString *title;
 @property NSArray *items;

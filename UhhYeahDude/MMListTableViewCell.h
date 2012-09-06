@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *theImageView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *durationLabel;
+@property (strong, nonatomic) IBOutlet UIView *frameView;
 
 - (void) setImage;
 

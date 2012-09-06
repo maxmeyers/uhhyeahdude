@@ -145,10 +145,10 @@ static NSArray *Months;
     return [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/%@", [self imageName]];
 }
 
-- (NSString *) description
-{
-    return [NSString stringWithFormat:@"<MMEpisode: %@ (%@)>", self.title, self.date];
-}
+//- (NSString *) description
+//{
+//    return [NSString stringWithFormat:@"<MMEpisode: %@ (%@)>", self.shortTitle, self.date];
+//}
 
 #pragma mark -
 #pragma mark NSCoding Methods
