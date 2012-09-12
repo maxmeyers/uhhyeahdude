@@ -11,6 +11,9 @@
 #import "MMVideoDataSource.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMoviePlayerViewController.h"
+#import "UAirship.h"
+#import "UAPush.h"
+#import "Appirater.h"
 
 @implementation MMAppDelegate
 
@@ -31,6 +34,19 @@
         [[NSFileManager defaultManager] copyItemAtPath:[NSString stringWithFormat:@"%@/images/", [[NSBundle mainBundle] resourcePath]] toPath:IMAGES_DIRECTORY error:&error];
     }
     
+    if (![[NSFileManager defaultManager] fileExistsAtPath:MEDIA_DIRECTORY]) {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:MEDIA_DIRECTORY withIntermediateDirectories:YES attributes:nil error:&error];
+    }
+
+    self.pushTags = [[NSUserDefaults standardUserDefaults] objectForKey:PUSH_TAGS_KEY];
+    if (!self.pushTags) {
+        self.pushTags = [NSArray arrayWithObject:EPISODE_PUSH_TAG];
+        [[NSUserDefaults standardUserDefaults] setObject:self.pushTags forKey:PUSH_TAGS_KEY];
+    }
+    
+    [Appirater setAppId:@"498175623"];
+    
     // Override point for customization after application launch.
     [[MMEpisodeDataSource sharedDataSource] setEpisodes:[NSKeyedUnarchiver unarchiveObjectWithFile:EPISODES_BIN]];
     [[MMEpisodeDataSource sharedDataSource] load];
@@ -48,7 +64,26 @@
     success = [audioSession setActive:YES error:&activationError];
     if (!success) { /* handle the error condition */ }
     
+    //Init Airship launch options
+    NSMutableDictionary *takeOffOptions = [[NSMutableDictionary alloc] init];
+    [takeOffOptions setValue:launchOptions forKey:UAirshipTakeOffOptionsLaunchOptionsKey];
+    
+    // Create Airship singleton that's used to talk to Urban Airship servers.
+    // Please populate AirshipConfig.plist with your info from http://go.urbanairship.com
+    [UAirship takeOff:takeOffOptions];
+    
     return YES;
+}
+
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Updates the device token and registers the token with UA
+    [[UAPush shared] registerDeviceToken:deviceToken];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:PUSH_ENABLED_KEY];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Couldn't register");
 }
 
 static NSString *_applicationDocumentsDirectory = nil;
@@ -63,7 +98,29 @@ static NSString *_applicationDocumentsDirectory = nil;
 
 -(void) applicationWillEnterForeground:(UIApplication *)application
 {
+    [[UAPush shared]
+     registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                         UIRemoteNotificationTypeSound |
+                                         UIRemoteNotificationTypeAlert)];
     [[MMEpisodeDataSource sharedDataSource] load];
+}
+
+- (void) applicationWillTerminate:(UIApplication *)application
+{
+    [UAirship land];
+}
+
+- (void) setPushTags:(NSArray *)pushTags
+{
+    _pushTags = pushTags;
+    if (pushTags) {
+        [[NSUserDefaults standardUserDefaults] setObject:pushTags forKey:PUSH_TAGS_KEY];
+        [[UAPush shared] setTags:_pushTags];
+        [[UAPush shared]
+         registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                             UIRemoteNotificationTypeSound |
+                                             UIRemoteNotificationTypeAlert)];
+    }
 }
 
 @end

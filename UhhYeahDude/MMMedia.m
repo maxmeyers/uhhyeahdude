@@ -130,9 +130,14 @@ static NSArray *Months;
     return @"";
 }
 
+- (NSString *) fileName
+{
+    return [self.url lastPathComponent];
+}
+
 - (NSString *) localFilePath
 {
-    return [NSString stringWithFormat:@"%@/%@", [MMAppDelegate applicationDocumentsDirectory], [self.url lastPathComponent]];
+    return [NSString stringWithFormat:@"%@/%@", MEDIA_DIRECTORY, [self.url lastPathComponent]];
 }
 
 - (NSString *) localImageFilePath
@@ -145,10 +150,28 @@ static NSArray *Months;
     return [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/%@", [self imageName]];
 }
 
-//- (NSString *) description
-//{
-//    return [NSString stringWithFormat:@"<MMEpisode: %@ (%@)>", self.shortTitle, self.date];
-//}
+- (BOOL) isEqual:(id)object
+{
+    if ([object class] != [self class]) {
+        return NO;
+    }
+
+    MMMedia *other = (MMMedia *)object;
+    if ([self.title isEqual:other.title] && [self.url isEqual:other.url]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (NSUInteger) hash
+{
+    int prime = 31;
+    int result = 1;
+    result = (prime * result) + [self.title hash];
+    result = (prime * result) + [self.url hash];
+    return result;
+}
+
 
 #pragma mark -
 #pragma mark NSCoding Methods

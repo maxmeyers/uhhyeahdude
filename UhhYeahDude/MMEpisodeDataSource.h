@@ -25,6 +25,8 @@
 - (void) load;
 - (void) search:(NSString *) text;
 
+- (void) updateEpisodes:(NSArray *)newEpisodes;
+
 @property (nonatomic) NSArray *episodes;
 @property NSMutableArray *searchEpisodes;
 

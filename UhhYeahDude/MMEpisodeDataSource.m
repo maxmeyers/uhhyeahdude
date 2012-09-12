@@ -12,6 +12,7 @@
 #import "MMEpisodeXMLParserDelegate.h"
 #import "MMAppDelegate.h"
 #import "MMMoviePlayerViewController.h"
+#import "Reachability.h"
 
 @implementation MMEpisodeDataSource
 
@@ -50,15 +51,33 @@ static MMEpisodeDataSource *_sharedDataSource;
     }
 }
 
+- (void) updateEpisodes:(NSArray *)newEpisodes
+{
+    NSMutableArray *updatedEpisodes = [NSMutableArray arrayWithArray:self.episodes];
+    for (MMMedia *media in newEpisodes) {
+        if ([updatedEpisodes indexOfObject:media] == NSNotFound) {
+            NSLog(@"Did not find %@ -- adding!", media.shortTitle);
+            [updatedEpisodes addObject:media];
+        }
+    }
+    if (updatedEpisodes.count != self.episodes.count) {
+        [self setEpisodes:updatedEpisodes];
+    }
+}
+
 - (void) setEpisodes:(NSArray *)episodes {
-    _episodes = episodes;
+    _episodes = [episodes sortedArrayUsingComparator:^NSComparisonResult(MMMedia *ep1, MMMedia *ep2) {
+        return [ep2.date compare:ep1.date];
+    }];
     [self updateListenersOfUpdate];
 }
 
 - (void) load
 {
-    [self updateListenersOfUpdateStart];
-    [NSThread detachNewThreadSelector:@selector(downloadListings) toTarget:self withObject:nil];
+    if ([[Reachability reachabilityForInternetConnection] isReachable]) {
+        [self updateListenersOfUpdateStart];
+        [NSThread detachNewThreadSelector:@selector(downloadListings) toTarget:self withObject:nil];
+    }
 }
 
 - (void) downloadListings

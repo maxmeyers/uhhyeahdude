@@ -30,6 +30,8 @@
     if (indexPath.section == 0) {
         return self.downloading ? 80 : 60;
     } else if (indexPath.section == 1) {
+        return 200;
+    } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             return self.descriptionLabel.frame.size.height + 20;
         }
@@ -60,7 +62,7 @@
         frame.size.height = [self.descriptionLabel.text sizeWithFont:self.descriptionLabel.font constrainedToSize:CGSizeMake(frame.size.width, 2000) lineBreakMode:UILineBreakModeWordWrap].height;
         self.descriptionLabel.frame = frame;
     } else {
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
     }
     self.title = (self.media.shortTitle) ? self.media.shortTitle : self.media.title;
     
@@ -93,6 +95,7 @@
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.media.url]];
         self.operation = [[AFURLConnectionOperation alloc] initWithRequest:request];
         [self.operation setCompletionBlock:^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             if (!self.operation.isCancelled) {
                 self.media.fileStatus = Available;
                 NSData *file = self.operation.responseData;
@@ -106,11 +109,12 @@
                 self.downloading = NO;
             }
         }];
-        [self.operation setDownloadProgressBlock:^(NSInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        [self.operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
             float progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
             self.downloadProgressView.progress = progress;
         }];
         [self.operation start];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         self.downloading = YES;
     } else if (self.downloaded) {
         NSURL *path = [NSURL fileURLWithPath:[self.media localFilePath]];

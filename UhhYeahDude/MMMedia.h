@@ -32,6 +32,7 @@ enum MMMediaType {
 - (void) setProperty:(NSString *) property andValue:(id)value;
 - (int) componentLength;
 - (NSString *) imageName;
+- (NSString *) fileName;
 - (NSString *) localFilePath;
 - (NSString *) localImageFilePath;
 - (NSString *) remoteImageFilePath;

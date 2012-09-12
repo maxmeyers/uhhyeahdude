@@ -190,12 +190,12 @@
 #pragma  mark UITableViewDatasource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return self.searching ? 1 : 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) return 1;
+    if (section == 0 && !self.searching) return 1;
     if (self.searching) {
         return SEARCH_EPISODES.count;
     } else {
@@ -207,7 +207,7 @@
 {
     static NSString *cellIdentifier = @"EpisodeCell";
     
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && !self.searching) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         return cell;
@@ -228,8 +228,7 @@
         episode = [EPISODES objectAtIndex:[indexPath row]];
     }
     
-    if (episode) {
-        cell.frameView.layer.cornerRadius = 5;
+    if (episode) {        
         cell.media = episode;
         [cell.titleLabel setText:episode.title];
         int fontSize = 17;

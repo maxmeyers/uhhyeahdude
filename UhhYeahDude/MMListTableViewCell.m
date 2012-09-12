@@ -22,9 +22,16 @@
     } else {
         self.theImageView.image = nil;
         NSMutableArray *possibilities = [NSMutableArray array];
-        [possibilities addObject:[NSURL fileURLWithPath:[self.media localImageFilePath]]];
+//        [possibilities addObject:[NSURL fileURLWithPath:[self.media localImageFilePath]]];
         [possibilities addObject:[NSURL URLWithString:[self.media remoteImageFilePath]]];
-        [self setEpisodeImageWithPossibilities:possibilities currentIndex:0];
+//        [self setEpisodeImageWithPossibilities:possibilities currentIndex:0];
+//    }
+        self.theImageView.image = [UIImage imageWithContentsOfFile:[self.media localImageFilePath]];
+        if (self.theImageView.image) {
+            
+        } else {        
+            [self setEpisodeImageWithPossibilities:possibilities currentIndex:0];
+        }
     }
 }
 
@@ -37,7 +44,7 @@
         success:^(UIImage *image) {
             // If the URL matches the media filename, which it should...
             if ([[thisURL absoluteString] rangeOfString:self.media.imageName].location != NSNotFound) {
-                self.media.image = image;
+//                self.media.image = image;
                 if ([[thisURL absoluteString] rangeOfString:@"http"].location != NSNotFound) {
                     NSLog(@"saving image %@", self.media.imageName);
                     [UIImageJPEGRepresentation(image, 1.0) writeToFile:self.media.localImageFilePath atomically:YES];
@@ -53,7 +60,7 @@
             } else {
                 if (self.media.imageName && [[thisURL absoluteString] rangeOfString:self.media.imageName].location != NSNotFound) {
                     self.media.image = placeHolder;
-                    NSLog(@"%@ failed", self.media.shortTitle);                    
+                    NSLog(@"%@ failed: %@", self.media.shortTitle, self.media.remoteImageFilePath);
                 }
             }
         }];
