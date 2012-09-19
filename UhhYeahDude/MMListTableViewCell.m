@@ -21,49 +21,35 @@
         self.theImageView.image = self.media.image;
     } else {
         self.theImageView.image = nil;
-        NSMutableArray *possibilities = [NSMutableArray array];
-//        [possibilities addObject:[NSURL fileURLWithPath:[self.media localImageFilePath]]];
-        [possibilities addObject:[NSURL URLWithString:[self.media remoteImageFilePath]]];
-//        [self setEpisodeImageWithPossibilities:possibilities currentIndex:0];
-//    }
-        self.theImageView.image = [UIImage imageWithContentsOfFile:[self.media localImageFilePath]];
-        if (self.theImageView.image) {
-            
-        } else {        
-            [self setEpisodeImageWithPossibilities:possibilities currentIndex:0];
+
+        NSString *localFilePath = self.media.localThumbnailFilePath;
+        self.theImageView.image = [UIImage imageWithContentsOfFile:localFilePath];
+        if (!self.theImageView.image) {
+            NSLog(@"requesting an image for %@", self.media.shortTitle);
+            __weak NSURL *thisURL = [NSURL URLWithString:[self.media remoteThumbnailFilePath]];
+            __block UIImage *previousImage = self.theImageView.image;
+            UIImage *placeHolder = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"defaultEpisode_thumb" ofType:@"png"]];
+            [self.theImageView setImageWithURL:thisURL placeholderImage:placeHolder
+                success:^(UIImage *image) {
+                    // If the URL matches the media filename, which it should...
+                    if ([[thisURL absoluteString] isEqualToString:self.media.remoteThumbnailFilePath]) {
+                        if ([[thisURL absoluteString] rangeOfString:@"http"].location != NSNotFound) {
+                            NSLog(@"saving image %@", self.media.imageName);
+                            [UIImageJPEGRepresentation(image, 1.0) writeToFile:localFilePath atomically:YES];
+                        }
+                    } else {
+                        NSLog(@"The cell that should have gotten %@ got %@ instead.", self.media.imageName, [[thisURL absoluteString] lastPathComponent]);
+                        self.theImageView.image = previousImage;
+                    }
+                    
+                } failure:^(NSError *error) {
+                    if (self.media.imageName && [[thisURL absoluteString] rangeOfString:self.media.imageName].location != NSNotFound) {
+                        self.media.image = placeHolder;
+                        NSLog(@"%@ failed: %@", self.media.shortTitle, thisURL);
+                    }
+                }];
         }
+
     }
 }
-
-- (void) setEpisodeImageWithPossibilities:(NSArray *)possibilities currentIndex:(int) i  {
-    __weak NSURL *thisURL = [possibilities objectAtIndex:i];
-    __weak MMListTableViewCell *blockCell = self;
-    __block UIImage *previousImage = self.theImageView.image;
-    UIImage *placeHolder = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"defaultEpisode" ofType:@"png"]];
-    [self.theImageView setImageWithURL:[possibilities objectAtIndex:i] placeholderImage:placeHolder
-        success:^(UIImage *image) {
-            // If the URL matches the media filename, which it should...
-            if ([[thisURL absoluteString] rangeOfString:self.media.imageName].location != NSNotFound) {
-//                self.media.image = image;
-                if ([[thisURL absoluteString] rangeOfString:@"http"].location != NSNotFound) {
-                    NSLog(@"saving image %@", self.media.imageName);
-                    [UIImageJPEGRepresentation(image, 1.0) writeToFile:self.media.localImageFilePath atomically:YES];
-                }
-            } else {
-                NSLog(@"The cell that should have gotten %@ got %@ instead.", self.media.imageName, [[thisURL absoluteString] lastPathComponent]);
-                self.theImageView.image = previousImage;
-            }
-            
-        } failure:^(NSError *error) {
-            if (i+1 < [possibilities count]) {
-                [blockCell setEpisodeImageWithPossibilities:possibilities currentIndex:i+1];
-            } else {
-                if (self.media.imageName && [[thisURL absoluteString] rangeOfString:self.media.imageName].location != NSNotFound) {
-                    self.media.image = placeHolder;
-                    NSLog(@"%@ failed: %@", self.media.shortTitle, self.media.remoteImageFilePath);
-                }
-            }
-        }];
-}
-
 @end

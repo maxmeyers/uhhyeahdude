@@ -8,12 +8,20 @@
 
 #import "MMMoviePlayerViewController.h"
 #import "MMMedia.h"
+#import "MMAppDelegate.h"
 
 @implementation MMMoviePlayerViewController
 
 - (void) viewDidLoad
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeNotification:) name:nil object:self.moviePlayer];
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(savePlaybackTime) userInfo:nil repeats:YES];
+}
+
+- (void) savePlaybackTime {
+    if (self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
+        [self.media setPlaybackTime:self.moviePlayer.currentPlaybackTime];
+    }
 }
 
 - (void) observeNotification:(NSNotification *)notification
@@ -40,7 +48,7 @@
     [self.backgroundImageView removeFromSuperview];
     self.backgroundImageView = nil;
     
-    UIImage *backgroundImage = self.media.image;
+    UIImage *backgroundImage = [UIImage imageWithContentsOfFile:self.media.localImageFilePath];
     if (backgroundImage && self.media.mediaType == Episode) {
         self.backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
         

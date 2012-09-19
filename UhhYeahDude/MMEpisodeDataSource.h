@@ -23,6 +23,7 @@
 - (void) registerForUpdates:(id<MMEpisodeDataSourceListener>)listener;
 
 - (void) load;
+- (void) save;
 - (void) search:(NSString *) text;
 
 - (void) updateEpisodes:(NSArray *)newEpisodes;

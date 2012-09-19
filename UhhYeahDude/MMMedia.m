@@ -52,6 +52,23 @@ static NSArray *Months;
             }
         }
     });
+    
+    self.playbackTime = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"%@_%@", PLAYBACK_TIME_KEY, self.fileName]];
+}
+
+- (void) setPlaybackTime:(int)playbackTime
+{
+    _playbackTime = playbackTime;
+    if (_playbackTime == 0) {
+        self.playStatus = NotStarted;
+    } else if (_playbackTime > self.durationInSeconds*0.95) {
+        self.playStatus = Finished;
+    } else {
+        self.playStatus = Started;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setInteger:playbackTime forKey:[NSString stringWithFormat:@"%@_%@", PLAYBACK_TIME_KEY, self.fileName]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString *) parseTitle:(NSString *)title
@@ -103,6 +120,34 @@ static NSArray *Months;
     return 0;
 }
 
+- (int) durationInSeconds
+{
+    if (self.duration) {
+        int seconds = 0;
+        NSArray *timeBlock = [self.duration componentsSeparatedByString:@":"];
+        for (int i = 0; i < timeBlock.count; i++) {
+            int time = [[timeBlock objectAtIndex:i] intValue];
+            if (timeBlock.count == 3) {
+                if (i == 0) {
+                    seconds += time * 60 * 60;
+                } else if (i == 1) {
+                    seconds += time * 60;
+                } else {
+                    seconds += time;
+                }
+            } else if (timeBlock.count == 2) {
+                if (i == 0) {
+                    seconds += time * 60;
+                } else {
+                    seconds += time;
+                }
+            }
+        }
+        return seconds;
+    }
+    return 0;
+}
+
 - (NSString *) fileExtension
 {
     switch (self.mediaType) {
@@ -116,18 +161,7 @@ static NSArray *Months;
 
 - (NSString *) imageName
 {
-    return [NSString stringWithFormat:@"%@.%@", [[self.url lastPathComponent] stringByDeletingPathExtension], [self fileExtension]];
-}
-
-- (NSString *) imageDirectoryName
-{
-    switch (self.mediaType) {
-        case Episode:
-            return @"episodes";
-        case SethsCorner:
-            return @"seth";
-    }
-    return @"";
+    return [NSString stringWithFormat:@"%@.jpg", [[self.fileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"%20" withString:@"+"]];
 }
 
 - (NSString *) fileName
@@ -140,9 +174,22 @@ static NSArray *Months;
     return [NSString stringWithFormat:@"%@/%@", MEDIA_DIRECTORY, [self.url lastPathComponent]];
 }
 
+- (NSString *) localThumbnailFilePath
+{
+    return [NSString stringWithFormat:@"%@/thumbs/%@", IMAGES_DIRECTORY, [self imageName]];
+}
+
 - (NSString *) localImageFilePath
 {
-    return [NSString stringWithFormat:@"%@/%@/%@", IMAGES_DIRECTORY, [self imageDirectoryName], [self imageName]];
+    return [NSString stringWithFormat:@"%@/%@", IMAGES_DIRECTORY, [self imageName]];
+}
+
+- (NSString *) remoteThumbnailFilePath
+{
+    NSString *url = [(MMAppDelegate *)[[UIApplication sharedApplication] delegate] thumbForFilename:self.fileName];
+    
+    return url ? url : [NSString stringWithFormat:@"fail: %@", self.url];
+//    return [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/thumbs/%@", [self imageName]];
 }
 
 - (NSString *) remoteImageFilePath
@@ -198,6 +245,21 @@ static NSArray *Months;
     [aCoder encodeObject:self.date forKey:@"date"];
     [aCoder encodeObject:self.duration forKey:@"duration"];
     [aCoder encodeObject:self.url forKey:@"url"];
+}
+
+#pragma mark -
+#pragma mark NSCopying Methods
+
+- (id) copyWithZone:(NSZone *)zone
+{
+    MMMedia *newMedia = [[MMMedia alloc] init];
+    newMedia.title = [self.title copy];
+    newMedia.shortTitle = [self.shortTitle copy];
+    newMedia.epDescription = [self.epDescription copy];
+    newMedia.date = [self.date copy];
+    newMedia.duration = [self.duration copy];
+    newMedia.url = [self.url copy];
+    return newMedia;
 }
 
 @end

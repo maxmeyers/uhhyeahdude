@@ -14,6 +14,8 @@
 #import "UAirship.h"
 #import "UAPush.h"
 #import "Appirater.h"
+#import "SBJson.h"
+#import "AFURLConnectionOperation.h"
 
 @implementation MMAppDelegate
 
@@ -21,6 +23,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:IMAGES_JSON]) {
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"images" ofType:@"json"] toPath:IMAGES_JSON error:nil];
+    }
+    self.imageMap = [[NSData dataWithContentsOfFile:IMAGES_JSON] JSONValue];
+    [self updateImageMap];
+    
     if (![[NSFileManager defaultManager] fileExistsAtPath:EPISODES_BIN]) {
         [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"episodes" ofType:@"bin"] toPath:EPISODES_BIN error:nil];
     }
@@ -122,5 +130,39 @@ static NSString *_applicationDocumentsDirectory = nil;
                                              UIRemoteNotificationTypeAlert)];
     }
 }
+
+- (NSString *) urlForFileName:(NSString *)filename ofType:(NSString *)type {
+    NSDictionary *map = [self.imageMap objectForKey:type];
+    if (map) {
+        NSString *url = [map objectForKey:filename];
+        if (url) {
+            return [url stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+        }
+    }
+    return nil;
+}
+
+- (NSString *) thumbForFilename:(NSString *)filename {
+    return [self urlForFileName:filename ofType:@"thumbs"];
+}
+
+- (NSString *) imageForFilename:(NSString *)filename {
+    return [self urlForFileName:filename ofType:@"images"];
+}
+
+- (void) updateImageMap {
+    AFURLConnectionOperation *operation = [[AFURLConnectionOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://s3.amazonaws.com/uhhyeahdude/images.json"]]];
+    [operation setCompletionBlock:^{
+        @try {
+            self.imageMap = [operation.responseString JSONValue];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Image Map Update Failed");
+        }
+    }];
+    [operation start];
+}
+
+
 
 @end

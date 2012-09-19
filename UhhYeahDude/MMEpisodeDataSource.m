@@ -62,6 +62,7 @@ static MMEpisodeDataSource *_sharedDataSource;
     }
     if (updatedEpisodes.count != self.episodes.count) {
         [self setEpisodes:updatedEpisodes];
+        [self save];
     }
 }
 
@@ -78,6 +79,16 @@ static MMEpisodeDataSource *_sharedDataSource;
         [self updateListenersOfUpdateStart];
         [NSThread detachNewThreadSelector:@selector(downloadListings) toTarget:self withObject:nil];
     }
+}
+
+- (void) save
+{
+    if (self.episodes) {
+        [NSKeyedArchiver archiveRootObject:self.episodes toFile:EPISODES_BIN];
+    }
+#if TARGET_IPHONE_SIMULATOR
+    [NSKeyedArchiver archiveRootObject:self.episodes toFile:@"/Users/maxmeyers/src/UhhYeahDude/UhhYeahDude/episodes.bin"];
+#endif
 }
 
 - (void) downloadListings

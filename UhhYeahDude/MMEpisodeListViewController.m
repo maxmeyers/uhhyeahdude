@@ -35,17 +35,11 @@
 - (void)viewDidLoad
 {
     [[MMEpisodeDataSource sharedDataSource] registerForUpdates:self];
-//    if (NSClassFromString(@"UIRefreshControl")) {
-//        self.refreshControl = [UIRefreshControl new];
-//        self.theRefreshControl = self.refreshControl;
-//    } else {
-//        self.theRefreshControl = [[ODRefreshControl alloc] initInScrollView:self.tableView];
-//    }
-//    [self.theRefreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     self.nowPlayingButton = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = nil;
     
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:38/255.0 green:38/255.0 blue:38/255.0 alpha:1.0];
+    
     [super viewDidLoad];
 }
 
@@ -239,7 +233,14 @@
         cell.titleLabel.font = font;
         
         cell.titleLabel.adjustsFontSizeToFitWidth = YES;
-        [cell.durationLabel setText:episode.duration];
+        cell.durationLabel.text = episode.duration;
+        if (episode.playStatus == Started) {
+            int secondsLeft = episode.durationInSeconds - episode.playbackTime;
+            int minutesLeft = floor(secondsLeft/60);
+            cell.timeLeftLabel.text = [NSString stringWithFormat:@"%dm left", minutesLeft];
+        } else {
+            cell.timeLeftLabel.text = nil;
+        }
         
         [cell setImage];
     }

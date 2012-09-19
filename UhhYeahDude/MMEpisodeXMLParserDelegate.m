@@ -60,10 +60,6 @@
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
     [[MMEpisodeDataSource sharedDataSource] updateEpisodes:currentEpisodes];
-    [NSKeyedArchiver archiveRootObject:currentEpisodes toFile:EPISODES_BIN];
-#ifdef TARGET_IPHONE_SIMULATOR
-    [NSKeyedArchiver archiveRootObject:currentEpisodes toFile:@"/Users/maxmeyers/Desktop/episodes.bin"];
-#endif
     currentEpisodes = nil;
 }
 

@@ -9,11 +9,13 @@
 #import "MMMoreViewController.h"
 #import "Appirater.h"
 
-@interface MMMoreViewController ()
-
-@end
-
 @implementation MMMoreViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:38/255.0 green:38/255.0 blue:38/255.0 alpha:1.0];
+}
 
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -59,6 +61,16 @@
         } else if (indexPath.row == 1) {
             [Appirater rateApp];
         }
+    }
+}
+
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    } else {
+        return YES;
     }
 }
 

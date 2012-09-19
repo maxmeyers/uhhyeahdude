@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MMDownloadManager.h"
 
-@class MMMedia, AFURLConnectionOperation;
+@class MMMedia, MMURLConnectionOperation;
 
-@interface MMMediaViewController : UITableViewController <UITableViewDelegate> {
+@interface MMMediaViewController : UITableViewController <UITableViewDelegate, MMDownloadListener> {
     CGRect downloadedPlayFrame;
     CGRect downloadedStreamFrame;
 }
@@ -26,7 +27,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *streamButton;
 @property (strong, nonatomic) IBOutlet UIProgressView *downloadProgressView;
 @property (strong, nonatomic) UIBarButtonItem *nowPlayingButton;
-@property AFURLConnectionOperation *operation;
+@property MMURLConnectionOperation *operation;
 
 - (IBAction)downloadButtonAction:(id)sender;
 - (IBAction)streamButtonAction:(id)sender;
