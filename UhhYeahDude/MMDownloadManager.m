@@ -102,7 +102,10 @@ static MMDownloadManager *_sharedManager;
 }
 
 - (BOOL) isDownloadingMedia:(MMMedia *)media {
-    return (BOOL)[self.downloads objectForKey:media];
+    if ([self.downloads objectForKey:media]) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

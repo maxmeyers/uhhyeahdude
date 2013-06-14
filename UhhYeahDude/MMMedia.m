@@ -187,14 +187,13 @@ static NSArray *Months;
 - (NSString *) remoteThumbnailFilePath
 {
     NSString *url = [(MMAppDelegate *)[[UIApplication sharedApplication] delegate] thumbForFilename:self.fileName];
-    
-    return url ? url : [NSString stringWithFormat:@"fail: %@", self.url];
-//    return [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/thumbs/%@", [self imageName]];
+    return url ? url : [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/thumbs/%@", [self imageName]];
 }
 
 - (NSString *) remoteImageFilePath
 {
-    return [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/%@", [self imageName]];
+    NSString *url = [(MMAppDelegate *)[[UIApplication sharedApplication] delegate] imageForFilename:self.fileName];
+    return url ? url : [NSString stringWithFormat:@"https://s3.amazonaws.com/uhhyeahdude/%@", [self imageName]];
 }
 
 - (BOOL) isEqual:(id)object

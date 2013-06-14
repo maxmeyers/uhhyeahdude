@@ -107,7 +107,6 @@
 {
     // Return YES for supported orientations
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        NSLog(@"%d", (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown));
         return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
     } else {
         return YES;

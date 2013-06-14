@@ -18,6 +18,9 @@
 #define APP_DELEGATE (MMAppDelegate *)[[UIApplication sharedApplication] delegate]
 #define MPVC [(MMAppDelegate *)[[UIApplication sharedApplication] delegate] mpvc]
 
+#define MEDIA_JSON_URL @"http://www.meyers.co/media.json"
+#define IMAGES_JSON_URL @"http://www.meyers.co/images.json"
+
 #define IMAGES_JSON [NSString stringWithFormat:@"%@/images.json", [MMAppDelegate applicationDocumentsDirectory]]
 #define EPISODES_BIN [NSString stringWithFormat:@"%@/episodes.bin", [MMAppDelegate applicationDocumentsDirectory]]
 #define VIDEOS_BIN [NSString stringWithFormat:@"%@/videos.bin", [MMAppDelegate applicationDocumentsDirectory]]

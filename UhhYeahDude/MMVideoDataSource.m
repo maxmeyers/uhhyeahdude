@@ -48,7 +48,7 @@ static MMVideoDataSource *_sharedDataSource;
 
 - (void) downloadAndProcessListings
 {
-    AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://s3.amazonaws.com/uhhyeahdude/media.json"]]];
+    AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:MEDIA_JSON_URL]]];
     __weak AFHTTPRequestOperation *blockOp = op;
     [op setCompletionBlock:^{
         NSString *jsonResponse = [blockOp responseString];

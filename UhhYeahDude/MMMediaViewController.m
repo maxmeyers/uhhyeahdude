@@ -93,34 +93,6 @@
 
 - (IBAction)downloadButtonAction:(id)sender {
     if (!self.downloading && !self.downloaded) {
-        
-//        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.media.url]];
-//        self.operation = [[MMURLConnectionOperation alloc] initWithRequest:request];
-//        self.operation.media = self.media;
-//        __block MMURLConnectionOperation *operation = self.operation;
-//        [[APP_DELEGATE downloads] addObject:self.operation];
-//        [self.operation setCompletionBlock:^{
-//            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//            if (!self.operation.isCancelled) {
-//                self.media.fileStatus = Available;
-//                NSData *file = self.operation.responseData;
-//                NSString *path = [self.media localFilePath];
-//                [file writeToFile:path atomically:NO];
-//                self.downloading = NO;
-//                self.downloaded = YES;
-//                self.operation = nil;
-//            } else {
-//                self.downloaded = NO;
-//                self.downloading = NO;
-//            }
-//            [[APP_DELEGATE downloads] removeObject:operation];
-//        }];
-//        [self.operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-//            float progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
-//            self.downloadProgressView.progress = progress;
-//        }];
-//        [self.operation start];
-//        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         [[MMDownloadManager sharedManager] registerListener:self forMedia:self.media];
         [[MMDownloadManager sharedManager] downloadMedia:self.media];
         self.downloading = YES;

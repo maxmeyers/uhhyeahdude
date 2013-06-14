@@ -151,7 +151,7 @@ static NSString *_applicationDocumentsDirectory = nil;
 }
 
 - (void) updateImageMap {
-    AFURLConnectionOperation *operation = [[AFURLConnectionOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://s3.amazonaws.com/uhhyeahdude/images.json"]]];
+    AFURLConnectionOperation *operation = [[AFURLConnectionOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:IMAGES_JSON_URL]]];
     [operation setCompletionBlock:^{
         @try {
             self.imageMap = [operation.responseString JSONValue];
