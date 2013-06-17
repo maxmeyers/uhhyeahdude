@@ -7,15 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MMEpisodeDataSource.h"
+#import "MMMediaDataSource.h"
 
-@class MMOverlayViewController, ODRefreshControl, MHLazyTableImages;
+@class MMOverlayViewController;
 
-@interface MMEpisodeListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, MMEpisodeDataSourceListener> {
+@interface MMEpisodeListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, MMMediaDataSourceListener> {
     MMOverlayViewController *ovController;
 }
-
-@property MHLazyTableImages *lazyImages;
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) UIBarButtonItem *nowPlayingButton;
@@ -27,5 +25,8 @@
 @property BOOL loading;
 @property BOOL searching;
 @property BOOL refreshing;
+
+@property NSManagedObjectContext *context;
+@property NSArray *objects;
 
 @end

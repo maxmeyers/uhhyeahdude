@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MMDownloadManager.h"
 
-@class MMMedia, MMURLConnectionOperation;
+@class Media, MMURLConnectionOperation;
 
-@interface MMMediaViewController : UITableViewController <UITableViewDelegate, MMDownloadListener> {
+@interface MMMediaViewController : UITableViewController <UITableViewDelegate> {
     CGRect downloadedPlayFrame;
     CGRect downloadedStreamFrame;
 }
@@ -21,7 +20,7 @@
 @property (nonatomic) BOOL downloaded;
 @property (nonatomic) BOOL playing;
 
-@property (strong, nonatomic) MMMedia *media;
+@property (strong, nonatomic) Media *media;
 @property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UIButton *downloadPlayButton;
 @property (strong, nonatomic) IBOutlet UIButton *streamButton;

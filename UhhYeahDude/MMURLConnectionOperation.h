@@ -8,10 +8,10 @@
 
 #import "AFURLConnectionOperation.h"
 
-@class MMMedia;
+@class Media;
 
 @interface MMURLConnectionOperation : AFURLConnectionOperation
 
-@property MMMedia *media;
+@property Media *media;
 
 @end

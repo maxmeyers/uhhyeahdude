@@ -7,7 +7,7 @@
 //
 
 #import "MMMediaViewController.h"
-#import "MMMedia.h"
+#import "Media.h"
 #import "AFNetworking.h"
 #import "MMAppDelegate.h"
 #import "SoundManager.h"
@@ -49,11 +49,11 @@
     downloadedPlayFrame = CGRectMake(20, 8, 260, 44);
     downloadedStreamFrame = CGRectMake(280, 8, 0, 44);
     
-    if (self.media.epDescription) {
-        self.descriptionLabel.text = self.media.epDescription;
+    if (self.media.desc) {
+        self.descriptionLabel.text = self.media.desc;
         self.descriptionLabel.numberOfLines = 0;
         CGRect frame = self.descriptionLabel.frame;
-        frame.size.height = [self.descriptionLabel.text sizeWithFont:self.descriptionLabel.font constrainedToSize:CGSizeMake(frame.size.width, 2000) lineBreakMode:UILineBreakModeWordWrap].height;
+        frame.size.height = [self.descriptionLabel.text sizeWithFont:self.descriptionLabel.font constrainedToSize:CGSizeMake(frame.size.width, 2000) lineBreakMode:NSLineBreakByWordWrapping].height;
         self.descriptionLabel.frame = frame;
     } else {
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
@@ -63,7 +63,7 @@
     self.downloaded = (self.media.fileStatus == Available);
     if (!self.downloaded) {
         if ([[MMDownloadManager sharedManager] isDownloadingMedia:self.media]) {
-            [[MMDownloadManager sharedManager] registerListener:self forMedia:self.media];
+            [self registerForDownloadNotifications];
             self.downloading = YES;
         }
     }
@@ -93,8 +93,8 @@
 
 - (IBAction)downloadButtonAction:(id)sender {
     if (!self.downloading && !self.downloaded) {
-        [[MMDownloadManager sharedManager] registerListener:self forMedia:self.media];
         [[MMDownloadManager sharedManager] downloadMedia:self.media];
+        [self registerForDownloadNotifications];
         self.downloading = YES;
     } else if (self.downloaded) {
         NSURL *path = [NSURL fileURLWithPath:[self.media localFilePath]];
@@ -138,13 +138,20 @@
     [self.downloadPlayButton setTitle:buttonText forState:UIControlStateNormal];
 }
 
-- (void) downloadProgressForMedia:(MMMedia *)media atProgress:(float)progress
-{
-    self.downloadProgressView.progress = progress;
+- (void) registerForDownloadNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadProgressForMedia:) name:kDownloadProgressNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadFinishedForMedia:) name:KDownloadFinishedNotification object:nil];
 }
 
-- (void) downloadFinishedForMedia:(MMMedia *)media
+- (void) downloadProgressForMedia:(NSNotification *)notification
 {
+    Media *media = notification.object;
+    self.downloadProgressView.progress = [[MMDownloadManager sharedManager] progressForMedia:media];
+}
+
+- (void) downloadFinishedForMedia:(NSNotification *)notification
+{
+    Media *media = notification.object;
     self.downloading = NO;
     self.downloaded = (media.fileStatus == Available);
 }

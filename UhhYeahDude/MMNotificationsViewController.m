@@ -21,9 +21,9 @@
     [super viewDidLoad];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:PUSH_ENABLED_KEY]) {
         for (NSString *pushTag in [APP_DELEGATE pushTags]) {
-            if ([pushTag isEqualToString:EPISODE_PUSH_TAG]) {
+            if ([pushTag isEqualToString:EPISODE_TAG]) {
                 [self.episodeSwitch setOn:YES animated:NO];
-            } else if ([pushTag isEqualToString:SETH_PUSH_TAG]) {
+            } else if ([pushTag isEqualToString:SETH_TAG]) {
                 [self.sethsCornerSwitch setOn:YES animated:NO];
             } else if ([pushTag isEqualToString:LIVE_PUSH_TAG]) {
                 [self.showSwitch setOn:YES animated:NO];
@@ -57,9 +57,9 @@
     NSString *pushTag;
     // Episodes
     if ([switchSender tag] == 0) {
-        pushTag = EPISODE_PUSH_TAG;
+        pushTag = EPISODE_TAG;
     } else if ([switchSender tag] == 1) {
-        pushTag = SETH_PUSH_TAG;
+        pushTag = SETH_TAG;
     } else if ([switchSender tag] == 2) {
         pushTag = LIVE_PUSH_TAG;
     }

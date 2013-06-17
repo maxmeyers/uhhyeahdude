@@ -6,8 +6,8 @@
 //
 //
 
-#import "MMVideoDataSource.h"
+#import "MMMediaDataSource.h"
 
-@interface MMVideoListViewController : UITableViewController <MMVideoDataSourceListener>
+@interface MMVideoListViewController : UITableViewController <MMMediaDataSourceListener>
 
 @end

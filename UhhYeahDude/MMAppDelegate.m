@@ -7,39 +7,26 @@
 //
 
 #import "MMAppDelegate.h"
-#import "MMEpisodeDataSource.h"
-#import "MMVideoDataSource.h"
+#import "MMMediaDataSource.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMoviePlayerViewController.h"
 #import "UAirship.h"
 #import "UAPush.h"
 #import "Appirater.h"
-#import "SBJson.h"
-#import "AFURLConnectionOperation.h"
+#import "Media.h"
+
+#import <Parse/Parse.h>
 
 @implementation MMAppDelegate
 
 @synthesize window = _window;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    if (![[NSFileManager defaultManager] fileExistsAtPath:IMAGES_JSON]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"images" ofType:@"json"] toPath:IMAGES_JSON error:nil];
-    }
-    self.imageMap = [[NSData dataWithContentsOfFile:IMAGES_JSON] JSONValue];
-    [self updateImageMap];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:EPISODES_BIN]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"episodes" ofType:@"bin"] toPath:EPISODES_BIN error:nil];
-    }
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath:VIDEOS_BIN]) {
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"videos" ofType:@"bin"] toPath:VIDEOS_BIN error:nil];
-    }
-    
+{   
     if (![[NSFileManager defaultManager] fileExistsAtPath:IMAGES_DIRECTORY]) {
         NSError *error;
         [[NSFileManager defaultManager] copyItemAtPath:[NSString stringWithFormat:@"%@/images/", [[NSBundle mainBundle] resourcePath]] toPath:IMAGES_DIRECTORY error:&error];
+//        [[NSFileManager defaultManager] createDirectoryAtPath:IMAGES_DIRECTORY withIntermediateDirectories:YES attributes:nil error:&error];
     }
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:MEDIA_DIRECTORY]) {
@@ -49,18 +36,23 @@
 
     self.pushTags = [[NSUserDefaults standardUserDefaults] objectForKey:PUSH_TAGS_KEY];
     if (!self.pushTags) {
-        self.pushTags = [NSArray arrayWithObject:EPISODE_PUSH_TAG];
+        self.pushTags = [NSArray arrayWithObject:EPISODE_TAG];
         [[NSUserDefaults standardUserDefaults] setObject:self.pushTags forKey:PUSH_TAGS_KEY];
     }
     
     [Appirater setAppId:@"498175623"];
     
-    // Override point for customization after application launch.
-    [[MMEpisodeDataSource sharedDataSource] setEpisodes:[NSKeyedUnarchiver unarchiveObjectWithFile:EPISODES_BIN]];
-    [[MMEpisodeDataSource sharedDataSource] load];
+    [Media registerSubclass];
+    [Parse setApplicationId:@"8fbBNwG2gvwFskbc3SjlO34qmidJkF3pCVPTuVc0"
+                  clientKey:@"TtUjkvcLTzjMIwwS2MiPJMNy7A0RJBF5SeDnvDwJ"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
-    [[MMVideoDataSource sharedDataSource] setSections:[NSKeyedUnarchiver unarchiveObjectWithFile:VIDEOS_BIN]];
-    [[MMVideoDataSource sharedDataSource] load];
+    // Override point for customization after application launch.
+    [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyCacheThenNetwork];
+
+    
+//    [[MMVideoDataSource sharedDataSource] setSections:[NSKeyedUnarchiver unarchiveObjectWithFile:VIDEOS_BIN]];
+//    [[MMVideoDataSource sharedDataSource] load];
     
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     
@@ -88,6 +80,7 @@
     // Updates the device token and registers the token with UA
     [[UAPush shared] registerDeviceToken:deviceToken];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:PUSH_ENABLED_KEY];
+    NSLog(@"we have liftoff");
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -110,7 +103,7 @@ static NSString *_applicationDocumentsDirectory = nil;
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
                                          UIRemoteNotificationTypeSound |
                                          UIRemoteNotificationTypeAlert)];
-    [[MMEpisodeDataSource sharedDataSource] load];
+    [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyCacheThenNetwork];
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application
@@ -130,39 +123,6 @@ static NSString *_applicationDocumentsDirectory = nil;
                                              UIRemoteNotificationTypeAlert)];
     }
 }
-
-- (NSString *) urlForFileName:(NSString *)filename ofType:(NSString *)type {
-    NSDictionary *map = [self.imageMap objectForKey:type];
-    if (map) {
-        NSString *url = [map objectForKey:filename];
-        if (url) {
-            return [url stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
-        }
-    }
-    return nil;
-}
-
-- (NSString *) thumbForFilename:(NSString *)filename {
-    return [self urlForFileName:filename ofType:@"thumbs"];
-}
-
-- (NSString *) imageForFilename:(NSString *)filename {
-    return [self urlForFileName:filename ofType:@"images"];
-}
-
-- (void) updateImageMap {
-    AFURLConnectionOperation *operation = [[AFURLConnectionOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:IMAGES_JSON_URL]]];
-    [operation setCompletionBlock:^{
-        @try {
-            self.imageMap = [operation.responseString JSONValue];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"Image Map Update Failed");
-        }
-    }];
-    [operation start];
-}
-
 
 
 @end

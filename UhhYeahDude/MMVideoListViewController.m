@@ -7,14 +7,12 @@
 //
 
 #import "MMVideoListViewController.h"
-#import "MMVideoDataSource.h"
-#import "MMVideoSection.h"
-#import "MMMedia.h"
+#import "Media.h"
 #import "MMListTableViewCell.h"
 #import "MMMediaViewController.h"
+#import "MMMediaDataSource.h"
 
-#define SECTIONS [[MMVideoDataSource sharedDataSource] sections]
-#define SECTION(X) [SECTIONS objectAtIndex:X]
+#define VIDEOS [[MMMediaDataSource sharedDataSource] videos]
 
 @implementation MMVideoListViewController
 
@@ -27,20 +25,25 @@
 
 - (void)viewDidLoad
 {
+    [[MMMediaDataSource sharedDataSource] registerForUpdates:self];
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:38/255.0 green:38/255.0 blue:38/255.0 alpha:1.0];
     [super viewDidLoad];
 }
 
 #pragma mark - Table view data source
 
-- (void) videosUpdated
+- (void) startingUpdate {
+    
+}
+
+- (void) mediaWasUpdated
 {
     [self.tableView reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return SECTIONS ? [SECTIONS count] + 1 : 0;
+    return VIDEOS ? 2 : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -48,7 +51,7 @@
     if (section == 0) {
         return 1;
     }
-    return SECTION(section-1) ? [[(MMVideoSection *)SECTION(section-1) items] count] : 0;
+    return (VIDEOS) ? [VIDEOS count] : 0;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -86,7 +89,7 @@
         cell.backgroundColor = [UIColor colorWithRed:213/255.0 green:213/255.0 blue:213/255.0 alpha:1.0];
     }
     
-    MMMedia *video = [[SECTION(indexPath.section-1) items] objectAtIndex:indexPath.row];
+    Media *video = [VIDEOS objectAtIndex:indexPath.row];
     cell.media = video;
     
     cell.titleLabel.text = video.title;
@@ -99,7 +102,7 @@
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     MMListTableViewCell *cell = [[MMListTableViewCell alloc] init];
-    cell.media = [[SECTION(indexPath.section-1) items] objectAtIndex:indexPath.row];
+    cell.media = [VIDEOS objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"VideoListToEpisodeView" sender:cell];
 }
 

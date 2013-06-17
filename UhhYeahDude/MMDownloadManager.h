@@ -8,24 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class MMMedia;
+#define kDownloadProgressNotification @"DOWNLOAD_PROGRESS_NOTIFICATION"
+#define KDownloadFinishedNotification @"DOWNLOAD_FINISHED_NOTIFICATION"
 
-@protocol MMDownloadListener
-
-- (void) downloadProgressForMedia:(MMMedia *)media atProgress:(float)progress;
-- (void) downloadFinishedForMedia:(MMMedia *)media;
-
-@end
+@class Media;
 
 @interface MMDownloadManager : NSObject
 
 + (MMDownloadManager *) sharedManager;
 
-- (void) registerListener:(id<MMDownloadListener>)listener forMedia:(MMMedia *)media;
-- (void) deregisterListener:(id<MMDownloadListener>)listener;
-
-- (void) downloadMedia:(MMMedia *)media;
-- (void) cancelDownloadForMedia:(MMMedia *)media;
-- (BOOL) isDownloadingMedia:(MMMedia *)media;
+- (void) downloadMedia:(Media *)media;
+- (void) cancelDownloadForMedia:(Media *)media;
+- (BOOL) isDownloadingMedia:(Media *)media;
+- (float) progressForMedia:(Media *)media;
 
 @end

@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
-@class MMMedia;
+@class MMMedia, Media;
 
 @interface MMListTableViewCell : UITableViewCell
 
-@property (weak) MMMedia *media;
+@property (weak) Media *media;
 @property (strong, nonatomic) IBOutlet UIImageView *theImageView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *durationLabel;

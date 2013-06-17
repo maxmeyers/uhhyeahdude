@@ -8,10 +8,8 @@
 
 #import "MMFilesViewController.h"
 #import "MMAppDelegate.h"
-#import "MMMedia.h"
-#import "MMEpisodeDataSource.h"
-#import "MMVideoDataSource.h"
-#import "MMVideoSection.h"
+#import "Media.h"
+#import "MMMediaDataSource.h"
 
 @implementation MMFilesViewController
 
@@ -26,19 +24,17 @@
         NSMutableDictionary *tempFileSizes = [NSMutableDictionary dictionary];
         
         NSMutableDictionary *episodesByFileName = [NSMutableDictionary dictionary];
-        for (MMMedia *media in [[MMEpisodeDataSource sharedDataSource] episodes]) {
+        for (Media *media in [[MMMediaDataSource sharedDataSource] episodes]) {
             [episodesByFileName setObject:media forKey:media.fileName];
         }
         
         NSMutableDictionary *videosByFileName = [NSMutableDictionary dictionary];
-        for (MMVideoSection *section in [[MMVideoDataSource sharedDataSource] sections]) {
-            for (MMMedia *media in [section items]) {
-                [videosByFileName setObject:media forKey:media.fileName];                
-            }
+        for (Media *media in [[MMMediaDataSource sharedDataSource] videos]) {
+            [videosByFileName setObject:media forKey:media.fileName];                
         }
 
         for (NSString *fileName in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MEDIA_DIRECTORY error:nil]) {
-            MMMedia *media = [episodesByFileName objectForKey:fileName];
+            Media *media = [episodesByFileName objectForKey:fileName];
             if (media) {
                 [tempEpisodes addObject:media];
             } else {
@@ -94,7 +90,7 @@
     NSArray *container = [self containerForSection:section];
     if (container) {
         int sum = 0;
-        for (MMMedia *media in container) {
+        for (Media *media in container) {
             NSNumber *size = [[self fileSizes] objectForKey:media.fileName];
             sum += [size longLongValue];
         }
@@ -164,7 +160,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (indexPath.row < container.count) {
-        MMMedia *media = [container objectAtIndex:indexPath.row];
+        Media *media = [container objectAtIndex:indexPath.row];
         cell.textLabel.text = media.shortTitle;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ MB",[self.fileSizes objectForKey:media.fileName]];
     }
@@ -192,7 +188,7 @@
         NSArray *container = [self containerForSection:indexPath.section];
         if (container) {
             NSMutableArray *tempNewContainer = [NSMutableArray arrayWithArray:container];
-            MMMedia *deletedMedia = [tempNewContainer objectAtIndex:indexPath.row];
+            Media *deletedMedia = [tempNewContainer objectAtIndex:indexPath.row];
             deletedMedia.fileStatus = NotAvailable;
             [tempNewContainer removeObject:deletedMedia];
             [self setContainer:[NSArray arrayWithArray:tempNewContainer] forSection:indexPath.section];

@@ -7,13 +7,14 @@
 //
 
 #import "MMDownloadManager.h"
-#import "MMMedia.h"
+#import "Media.h"
 #import "MMURLConnectionOperation.h"
 
 @interface MMDownloadManager ()
 
 @property NSMutableDictionary *listeners;
 @property NSMutableDictionary *downloads;
+@property NSMutableDictionary *progress;
 
 @end
 
@@ -33,43 +34,21 @@ static MMDownloadManager *_sharedManager;
     if (self) {
         self.listeners = [NSMutableDictionary dictionary];
         self.downloads = [NSMutableDictionary dictionary];
+        self.progress = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
-- (void) registerListener:(id<MMDownloadListener>)listener forMedia:(MMMedia *)media {
-    if (![self.listeners objectForKey:media]) {
-        [self.listeners setObject:[NSMutableArray array] forKey:media];
-    }
-    
-    if ([[self.listeners objectForKey:media] indexOfObject:media] == NSNotFound) {
-        [[self.listeners objectForKey:media] addObject:listener];
-    }
+- (void) notifyListenersOfDownloadProgress:(float)progress forMedia:(Media *)media  {
+    [self.progress setObject:@(progress) forKey:media.fileName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kDownloadProgressNotification object:media];
 }
 
-- (void) deregisterListener:(id<MMDownloadListener>)listener {
-    for (NSMutableArray *listenerList in self.listeners.allValues) {
-        [listenerList removeObject:listener];
-    }
+- (void) notifyListenersOfDownloadCompletionForMedia:(Media *)media  {
+    [[NSNotificationCenter defaultCenter] postNotificationName:KDownloadFinishedNotification object:media];
 }
 
-- (void) notifyListenersOfDownloadProgress:(float)progress forMedia:(MMMedia *)media  {
-    if ([self.listeners objectForKey:media]) {
-        for (id<MMDownloadListener> listener in [self.listeners objectForKey:media]) {
-            [listener downloadProgressForMedia:media atProgress:progress];
-        }
-    }
-}
-
-- (void) notifyListenersOfDownloadCompletionForMedia:(MMMedia *)media  {
-    if ([self.listeners objectForKey:media]) {
-        for (id<MMDownloadListener> listener in [self.listeners objectForKey:media]) {
-            [listener downloadFinishedForMedia:media];
-        }
-    }
-}
-
-- (void) downloadMedia:(MMMedia *)media {
+- (void) downloadMedia:(Media *)media {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:media.url]];
     MMURLConnectionOperation *operation = [[MMURLConnectionOperation alloc] initWithRequest:request];
     __weak MMURLConnectionOperation *blockOp = operation;
@@ -85,27 +64,34 @@ static MMDownloadManager *_sharedManager;
         }
         
         [self notifyListenersOfDownloadCompletionForMedia:media];
-        [self.downloads removeObjectForKey:media];
+        [self.downloads removeObjectForKey:media.fileName];
         if (self.downloads.count == 0) {
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         }
     }];
     [operation start];
-    [self.downloads setObject:operation forKey:media];
+    [self.downloads setObject:operation forKey:media.fileName];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
-- (void) cancelDownloadForMedia:(MMMedia *)media {
-    if ([self.downloads objectForKey:media]) {
-        [(MMURLConnectionOperation *)[self.downloads objectForKey:media] cancel];
+- (void) cancelDownloadForMedia:(Media *)media {
+    if ([self.downloads objectForKey:media.fileName]) {
+        [(MMURLConnectionOperation *)[self.downloads objectForKey:media.fileName] cancel];
     }
 }
 
-- (BOOL) isDownloadingMedia:(MMMedia *)media {
-    if ([self.downloads objectForKey:media]) {
+- (BOOL) isDownloadingMedia:(Media *)media {
+    if ([self.downloads objectForKey:media.fileName]) {
         return YES;
     }
     return NO;
+}
+
+- (float) progressForMedia:(Media *)media {
+    if ([self.progress objectForKey:media.fileName]) {
+        return [(NSNumber *)[self.progress objectForKey:media.fileName] floatValue];
+    }
+    return 0.0;
 }
 
 @end

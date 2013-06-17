@@ -8,17 +8,17 @@
 
 #import "MMEpisodeListViewController.h"
 #import "MMMediaViewController.h"
-#import "MMEpisodeDataSource.h"
+#import "MMMediaDataSource.h"
 #import "MMOverlayViewController.h"
-#import "ODRefreshControl.h"
 #import "MMListTableViewCell.h"
-#import "MMMedia.h"
 #import "MMMoviePlayerViewController.h"
 #import "MMAppDelegate.h"
 #import "UIImageView+WebCache.h"
+#import "Media.h"
+#import <Parse/Parse.h>
 
-#define EPISODES [[MMEpisodeDataSource sharedDataSource] episodes]
-#define SEARCH_EPISODES [[MMEpisodeDataSource sharedDataSource] searchEpisodes]
+#define EPISODES [[MMMediaDataSource sharedDataSource] episodes]
+#define SEARCH_EPISODES [[MMMediaDataSource sharedDataSource] searchEpisodes]
 
 @implementation MMEpisodeListViewController
 @synthesize searchBar;
@@ -34,27 +34,28 @@
 
 - (void)viewDidLoad
 {
-    [[MMEpisodeDataSource sharedDataSource] registerForUpdates:self];
+    [[MMMediaDataSource sharedDataSource] registerForUpdates:self];
     self.nowPlayingButton = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = nil;
     
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:38/255.0 green:38/255.0 blue:38/255.0 alpha:1.0];
+//    self.context = [[APP_DELEGATE coreDataStore] contextForCurrentThread];
     
     [super viewDidLoad];
 }
 
 #pragma mark -
-#pragma mark MMEpisodeDataSourceListener methods
+#pragma mark MMMediaDataSourceListener methods
 
 - (void) startingUpdate
 {
-    self.loading = YES;
+//    self.loading = YES;
 }
 
-- (void) episodesWereUpdated
+- (void) mediaWasUpdated
 {
     [self.tableView reloadData];
-    self.loading = NO;
+//    self.loading = NO;
     if (self.refreshing) {
         self.refreshing = NO;
         [self.theRefreshControl performSelector:@selector(endRefreshing)];
@@ -136,7 +137,7 @@
 		[ovController.view removeFromSuperview];
         self.searching = YES;
 		self.tableView.scrollEnabled = YES;
-        [[MMEpisodeDataSource sharedDataSource] search:searchText];
+        [[MMMediaDataSource sharedDataSource] search:searchText];
 	} else {
 		[self.tableView insertSubview:ovController.view aboveSubview:self.parentViewController.view];
         self.searching = NO;
@@ -148,7 +149,7 @@
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar
 {	
-    [(MMEpisodeDataSource *)self.tableView.dataSource search:theSearchBar.text];
+    [(MMMediaDataSource *)self.tableView.dataSource search:theSearchBar.text];
 }
 
 - (void) doneSearching {
@@ -171,8 +172,8 @@
 
 - (IBAction) refresh:(id) sender
 {
-    self.refreshing = YES;
-    [[MMEpisodeDataSource sharedDataSource] load];
+//    self.refreshing = YES;
+//    [[MMMediaDataSource sharedDataSource] load];
 }
 
 - (IBAction)nowPlayingAction:(id)sender
@@ -193,7 +194,11 @@
     if (self.searching) {
         return SEARCH_EPISODES.count;
     } else {
-        return (EPISODES) ? EPISODES.count : 0;
+        if (EPISODES) {
+            return EPISODES.count;
+        } else {
+            return 0;
+        }
     }
 }
 
@@ -215,7 +220,7 @@
         cell.backgroundColor = [UIColor colorWithRed:213/255.0 green:213/255.0 blue:213/255.0 alpha:1.0];
     }
     
-    MMMedia *episode;
+    Media *episode;
     if (self.searching) {
         episode = [SEARCH_EPISODES objectAtIndex:[indexPath row]];
     } else {
@@ -224,7 +229,8 @@
     
     if (episode) {        
         cell.media = episode;
-        [cell.titleLabel setText:episode.title];
+        NSString *title = [episode valueForKey:@"title"];
+        [cell.titleLabel setText:title];
         int fontSize = 17;
         if ([episode componentLength] > 5) {
             fontSize = 13;

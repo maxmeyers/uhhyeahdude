@@ -7,7 +7,7 @@
 //
 
 #import "MMMoviePlayerViewController.h"
-#import "MMMedia.h"
+#import "Media.h"
 #import "MMAppDelegate.h"
 
 @implementation MMMoviePlayerViewController
@@ -49,7 +49,7 @@
     self.backgroundImageView = nil;
     
     UIImage *backgroundImage = [UIImage imageWithContentsOfFile:self.media.localImageFilePath];
-    if (backgroundImage && self.media.mediaType == Episode) {
+    if (backgroundImage && [self.media.mediaType isEqualToString:@"Episode"]) {
         self.backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
         
         CGRect superFrame = self.moviePlayer.backgroundView.bounds;
@@ -80,7 +80,7 @@
     for (UIView *view in self.moviePlayer.backgroundView.subviews) {
         [view removeFromSuperview];
     }
-    if (self.media.mediaType == SethsCorner) {
+    if ([self.media.mediaType isEqualToString:@"SethsCorner"]) {
         [super viewDidDisappear:animated];
     }
 }
