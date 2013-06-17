@@ -25,7 +25,7 @@
         NSString *localFilePath = self.media.localThumbnailFilePath;
         self.theImageView.image = [UIImage imageWithContentsOfFile:localFilePath];
         if (!self.theImageView.image) {
-            NSLog(@"requesting an image for %@", self.media.shortTitle);
+            NSLog(@"requesting an image for %@", self.media.title);
             __weak NSURL *thisURL = [NSURL URLWithString:[self.media thumbUrl]];
             __block UIImage *previousImage = self.theImageView.image;
             UIImage *placeHolder = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"defaultEpisode_thumb" ofType:@"png"]];
@@ -48,7 +48,7 @@
                 } failure:^(NSError *error) {
                     if (weakSelf.media.imageName && [[thisURL absoluteString] rangeOfString:weakSelf.media.imageName].location != NSNotFound) {
                         weakSelf.media.image = placeHolder;
-                        NSLog(@"%@ failed: %@", weakSelf.media.shortTitle, thisURL);
+                        NSLog(@"%@ failed: %@", weakSelf.media.title, thisURL);
                     }
                 }];
         }

@@ -10,6 +10,7 @@
 #import "MMAppDelegate.h"
 #import "Media.h"
 #import "MMMediaDataSource.h"
+#import "MMFileManager.h"
 
 @implementation MMFilesViewController
 
@@ -161,7 +162,7 @@
     
     if (indexPath.row < container.count) {
         Media *media = [container objectAtIndex:indexPath.row];
-        cell.textLabel.text = media.shortTitle;
+        cell.textLabel.text = media.title;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ MB",[self.fileSizes objectForKey:media.fileName]];
     }
     
@@ -189,15 +190,13 @@
         if (container) {
             NSMutableArray *tempNewContainer = [NSMutableArray arrayWithArray:container];
             Media *deletedMedia = [tempNewContainer objectAtIndex:indexPath.row];
-            deletedMedia.fileStatus = NotAvailable;
+            [[MMFileManager sharedManager] deleteFileForMedia:deletedMedia];
             [tempNewContainer removeObject:deletedMedia];
             [self setContainer:[NSArray arrayWithArray:tempNewContainer] forSection:indexPath.section];
-            
             
             if (tempNewContainer.count == 0) {
                 [self.recentlyEmptied addObject:[NSNumber numberWithInt:indexPath.section]];
             }
-            [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", MEDIA_DIRECTORY, deletedMedia.fileName] error:nil];
         }
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];

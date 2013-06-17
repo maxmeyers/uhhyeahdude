@@ -9,18 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "MMMediaDataSource.h"
 
+#define EPISODES [[MMMediaDataSource sharedDataSource] episodes]
+#define SEARCH_EPISODES [[MMMediaDataSource sharedDataSource] searchEpisodes]
+
 @class MMOverlayViewController;
 
-@interface MMEpisodeListViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, MMMediaDataSourceListener> {
+@interface MMEpisodeListViewController : UIViewController <UISearchBarDelegate, MMMediaDataSourceListener> {
     MMOverlayViewController *ovController;
 }
 
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) UIBarButtonItem *nowPlayingButton;
-@property (strong, nonatomic) UIControl *theRefreshControl;
 
 - (IBAction)nowPlayingAction:(id)sender;
-- (IBAction)refresh:(id)sender;
 
 @property BOOL loading;
 @property BOOL searching;

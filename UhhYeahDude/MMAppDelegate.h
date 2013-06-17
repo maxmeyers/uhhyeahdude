@@ -18,11 +18,8 @@
 #define APP_DELEGATE (MMAppDelegate *)[[UIApplication sharedApplication] delegate]
 #define MPVC [(MMAppDelegate *)[[UIApplication sharedApplication] delegate] mpvc]
 
-#define EPISODES_BIN [NSString stringWithFormat:@"%@/episodes.bin", [MMAppDelegate applicationDocumentsDirectory]]
-#define VIDEOS_BIN [NSString stringWithFormat:@"%@/videos.bin", [MMAppDelegate applicationDocumentsDirectory]]
 #define IMAGES_DIRECTORY [NSString stringWithFormat:@"%@/images", [MMAppDelegate applicationDocumentsDirectory]]
 #define MEDIA_DIRECTORY [NSString stringWithFormat:@"%@/media", [MMAppDelegate applicationDocumentsDirectory]]
-#define EPISODE_SETH_DIRECTORY [NSString stringWithFormat:@"%@/images/seth", [MMAppDelegate applicationDocumentsDirectory]]
 
 @class MMMoviePlayerViewController, Media;
 

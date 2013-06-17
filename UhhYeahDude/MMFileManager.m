@@ -6,25 +6,27 @@
 //
 //
 
-#import "MMDownloadManager.h"
+#import "MMFileManager.h"
 #import "Media.h"
 #import "MMURLConnectionOperation.h"
+#import "MMAppDelegate.h"
 
-@interface MMDownloadManager ()
+@interface MMFileManager ()
 
 @property NSMutableDictionary *listeners;
 @property NSMutableDictionary *downloads;
 @property NSMutableDictionary *progress;
+@property NSMutableDictionary *fileStatuses;
 
 @end
 
-@implementation MMDownloadManager
+@implementation MMFileManager
 
-static MMDownloadManager *_sharedManager;
+static MMFileManager *_sharedManager;
 
-+ (MMDownloadManager *) sharedManager {
++ (MMFileManager *) sharedManager {
     if (_sharedManager == nil) {
-        _sharedManager = [[MMDownloadManager alloc] init];
+        _sharedManager = [[MMFileManager alloc] init];
     }
     return _sharedManager;
 }
@@ -35,6 +37,7 @@ static MMDownloadManager *_sharedManager;
         self.listeners = [NSMutableDictionary dictionary];
         self.downloads = [NSMutableDictionary dictionary];
         self.progress = [NSMutableDictionary dictionary];
+        self.fileStatuses = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -60,7 +63,7 @@ static MMDownloadManager *_sharedManager;
     [operation setCompletionBlock:^{
         if (!blockOp.isCancelled) {
             [blockOp.responseData writeToFile:[media localFilePath] atomically:NO];
-            media.fileStatus = Available;
+            [self.fileStatuses setObject:@(YES) forKey:media.fileName];
         }
         
         [self notifyListenersOfDownloadCompletionForMedia:media];
@@ -92,6 +95,25 @@ static MMDownloadManager *_sharedManager;
         return [(NSNumber *)[self.progress objectForKey:media.fileName] floatValue];
     }
     return 0.0;
+}
+
+- (BOOL) hasFileForMedia:(Media *)media {
+    if (![self.fileStatuses objectForKey:media.fileName]) {
+        NSString *path = media.localFilePath;
+        if (path) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                [self.fileStatuses setObject:@(YES) forKey:media.fileName];
+            } else {
+                [self.fileStatuses setObject:@(NO) forKey:media.fileName];
+            }
+        }
+    }
+    return [(NSNumber*)[self.fileStatuses objectForKey:media.fileName] boolValue];
+}
+
+- (void) deleteFileForMedia:(Media *)media {
+    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", MEDIA_DIRECTORY, media.fileName] error:nil];
+    [self.fileStatuses setObject:@(NO) forKey:media.fileName];
 }
 
 @end

@@ -13,7 +13,7 @@
 #import "SoundManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "MMMoviePlayerViewController.h"
-#import "MMDownloadManager.h"
+#import "MMFileManager.h"
 
 @implementation MMMediaViewController
 
@@ -58,11 +58,11 @@
     } else {
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
-    self.title = (self.media.shortTitle) ? self.media.shortTitle : self.media.title;
+    self.title = self.media.title;
     
-    self.downloaded = (self.media.fileStatus == Available);
+    self.downloaded = [[MMFileManager sharedManager] hasFileForMedia:self.media];
     if (!self.downloaded) {
-        if ([[MMDownloadManager sharedManager] isDownloadingMedia:self.media]) {
+        if ([[MMFileManager sharedManager] isDownloadingMedia:self.media]) {
             [self registerForDownloadNotifications];
             self.downloading = YES;
         }
@@ -93,7 +93,7 @@
 
 - (IBAction)downloadButtonAction:(id)sender {
     if (!self.downloading && !self.downloaded) {
-        [[MMDownloadManager sharedManager] downloadMedia:self.media];
+        [[MMFileManager sharedManager] downloadMedia:self.media];
         [self registerForDownloadNotifications];
         self.downloading = YES;
     } else if (self.downloaded) {
@@ -104,7 +104,7 @@
 
 - (IBAction)streamButtonAction:(id)sender {
     if (self.downloading) {
-        [[MMDownloadManager sharedManager] cancelDownloadForMedia:self.media];
+        [[MMFileManager sharedManager] cancelDownloadForMedia:self.media];
     }
     [self playMediaWithURL:[NSURL URLWithString:self.media.url]];
 }
@@ -146,14 +146,14 @@
 - (void) downloadProgressForMedia:(NSNotification *)notification
 {
     Media *media = notification.object;
-    self.downloadProgressView.progress = [[MMDownloadManager sharedManager] progressForMedia:media];
+    self.downloadProgressView.progress = [[MMFileManager sharedManager] progressForMedia:media];
 }
 
 - (void) downloadFinishedForMedia:(NSNotification *)notification
 {
     Media *media = notification.object;
     self.downloading = NO;
-    self.downloaded = (media.fileStatus == Available);
+    self.downloaded = [[MMFileManager sharedManager] hasFileForMedia:media];
 }
 
 - (void) setDownloading:(BOOL)downloading

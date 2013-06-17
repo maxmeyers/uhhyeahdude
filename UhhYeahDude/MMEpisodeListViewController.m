@@ -17,9 +17,6 @@
 #import "Media.h"
 #import <Parse/Parse.h>
 
-#define EPISODES [[MMMediaDataSource sharedDataSource] episodes]
-#define SEARCH_EPISODES [[MMMediaDataSource sharedDataSource] searchEpisodes]
-
 @implementation MMEpisodeListViewController
 @synthesize searchBar;
 
@@ -39,9 +36,12 @@
     self.navigationItem.rightBarButtonItem = nil;
     
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:38/255.0 green:38/255.0 blue:38/255.0 alpha:1.0];
-//    self.context = [[APP_DELEGATE coreDataStore] contextForCurrentThread];
     
     [super viewDidLoad];
+}
+
+- (UITableView*) tableView {
+    return (UITableView*)self.view;
 }
 
 #pragma mark -
@@ -49,17 +49,12 @@
 
 - (void) startingUpdate
 {
-//    self.loading = YES;
+
 }
 
 - (void) mediaWasUpdated
 {
     [self.tableView reloadData];
-//    self.loading = NO;
-    if (self.refreshing) {
-        self.refreshing = NO;
-        [self.theRefreshControl performSelector:@selector(endRefreshing)];
-    }
 }
 
 #pragma mark -
@@ -170,88 +165,9 @@
 #pragma mark -
 #pragma mark actions
 
-- (IBAction) refresh:(id) sender
-{
-//    self.refreshing = YES;
-//    [[MMMediaDataSource sharedDataSource] load];
-}
-
 - (IBAction)nowPlayingAction:(id)sender
 {
     [self.navigationController pushViewController:MPVC animated:YES];
-}
-
-#pragma  mark -
-#pragma  mark UITableViewDatasource methods
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return self.searching ? 1 : 2;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == 0 && !self.searching) return 1;
-    if (self.searching) {
-        return SEARCH_EPISODES.count;
-    } else {
-        if (EPISODES) {
-            return EPISODES.count;
-        } else {
-            return 0;
-        }
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellIdentifier = @"EpisodeCell";
-    
-    if (indexPath.section == 0 && !self.searching) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
-        cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
-        return cell;
-    }
-    
-    MMListTableViewCell *cell = (MMListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (indexPath.row % 2 == 0) {
-        cell.backgroundColor = [UIColor colorWithRed:184/255.0 green:184/255.0 blue:184/255.0 alpha:1.0];
-    } else {
-        cell.backgroundColor = [UIColor colorWithRed:213/255.0 green:213/255.0 blue:213/255.0 alpha:1.0];
-    }
-    
-    Media *episode;
-    if (self.searching) {
-        episode = [SEARCH_EPISODES objectAtIndex:[indexPath row]];
-    } else {
-        episode = [EPISODES objectAtIndex:[indexPath row]];
-    }
-    
-    if (episode) {        
-        cell.media = episode;
-        NSString *title = [episode valueForKey:@"title"];
-        [cell.titleLabel setText:title];
-        int fontSize = 17;
-        if ([episode componentLength] > 5) {
-            fontSize = 13;
-        }
-        UIFont *font = [UIFont fontWithName:cell.titleLabel.font.fontName size:fontSize];
-        cell.titleLabel.font = font;
-        
-        cell.titleLabel.adjustsFontSizeToFitWidth = YES;
-        cell.durationLabel.text = episode.duration;
-        if (episode.playStatus == Started) {
-            int secondsLeft = episode.durationInSeconds - episode.playbackTime;
-            int minutesLeft = floor(secondsLeft/60);
-            cell.timeLeftLabel.text = [NSString stringWithFormat:@"%dm left", minutesLeft];
-        } else {
-            cell.timeLeftLabel.text = nil;
-        }
-        
-        [cell setImage];
-    }
-    
-    return cell;
 }
 
 @end

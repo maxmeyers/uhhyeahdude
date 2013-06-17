@@ -29,15 +29,15 @@ enum MMPlayStatus {
 @property (nonatomic) NSTimeInterval date;
 @property (nonatomic, retain) NSString * desc;
 @property (nonatomic, retain) NSString * duration;
-@property (nonatomic, retain) NSString * shortTitle;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * mediaId;
 @property (nonatomic, retain) NSString * mediaType;
 @property (nonatomic, retain) NSString * imageUrl;
 @property (nonatomic, retain) NSString * thumbUrl;
+
 @property (nonatomic) int16_t playbackTime;
-@property (nonatomic) enum MMFileStatus fileStatus;
+//@property (nonatomic) enum MMFileStatus fileStatus;
 @property (nonatomic) enum MMPlayStatus playStatus;
 
 @property UIImage *image;
@@ -47,6 +47,8 @@ enum MMPlayStatus {
 - (NSString *) imageName;
 - (NSString *) fileName;
 - (NSString *) localFilePath;
+
+- (void) checkStatus;
 
 - (NSString *) localThumbnailFilePath;
 - (NSString *) localImageFilePath;

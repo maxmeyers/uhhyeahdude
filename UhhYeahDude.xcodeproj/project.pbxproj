@@ -44,6 +44,9 @@
 		BD68C381176FA23600558E99 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C377176FA23600558E99 /* AFXMLRequestOperation.m */; };
 		BD68C382176FA23600558E99 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C379176FA23600558E99 /* UIImageView+AFNetworking.m */; };
 		BD68C538176FA3D300558E99 /* images in Resources */ = {isa = PBXBuildFile; fileRef = BDCEF27A15F4095900280AAB /* images */; };
+		BD68C53B176FB7F500558E99 /* MMEpisodeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C53A176FB7F500558E99 /* MMEpisodeTableViewController.m */; };
+		BD68C53E176FB9FD00558E99 /* MMEpisodeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C53D176FB9FD00558E99 /* MMEpisodeCollectionViewController.m */; };
+		BD68C541176FBB3200558E99 /* MMEpisodeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C540176FBB3200558E99 /* MMEpisodeCollectionViewCell.m */; };
 		BD74EF5215EF24BD00AD0131 /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD74EF5115EF24BD00AD0131 /* SoundManager.m */; };
 		BD74EF5A15EF333C00AD0131 /* MMMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD74EF5915EF333C00AD0131 /* MMMoviePlayerViewController.m */; };
 		BD84C71715FD85E60064218E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BD84C71415FD85DE0064218E /* Reachability.m */; };
@@ -61,7 +64,7 @@
 		BD925A8215F8858200C92FC7 /* frame.png in Resources */ = {isa = PBXBuildFile; fileRef = BD925A8115F8858200C92FC7 /* frame.png */; };
 		BD97EE11176D551500A37D07 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = BD97EE10176D551500A37D07 /* Media.m */; };
 		BDA159EC1605567200A77235 /* MMURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA159EB1605567200A77235 /* MMURLConnectionOperation.m */; };
-		BDA159F01605ADAB00A77235 /* MMDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA159EF1605ADAB00A77235 /* MMDownloadManager.m */; };
+		BDA159F01605ADAB00A77235 /* MMFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA159EF1605ADAB00A77235 /* MMFileManager.m */; };
 		BDA5179415E8B53B001979F8 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA5179315E8B53B001979F8 /* MediaPlayer.framework */; };
 		BDA5184015E8BB69001979F8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA5183F15E8BB69001979F8 /* AVFoundation.framework */; };
 		BDC662A415F85D3300DF1C1D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BDC662A315F85D3300DF1C1D /* icon.png */; };
@@ -162,6 +165,12 @@
 		BD68C377176FA23600558E99 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		BD68C378176FA23600558E99 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		BD68C379176FA23600558E99 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		BD68C539176FB7F500558E99 /* MMEpisodeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMEpisodeTableViewController.h; sourceTree = "<group>"; };
+		BD68C53A176FB7F500558E99 /* MMEpisodeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMEpisodeTableViewController.m; sourceTree = "<group>"; };
+		BD68C53C176FB9FD00558E99 /* MMEpisodeCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMEpisodeCollectionViewController.h; sourceTree = "<group>"; };
+		BD68C53D176FB9FD00558E99 /* MMEpisodeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMEpisodeCollectionViewController.m; sourceTree = "<group>"; };
+		BD68C53F176FBB3200558E99 /* MMEpisodeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMEpisodeCollectionViewCell.h; sourceTree = "<group>"; };
+		BD68C540176FBB3200558E99 /* MMEpisodeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMEpisodeCollectionViewCell.m; sourceTree = "<group>"; };
 		BD74EF5015EF24BD00AD0131 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
 		BD74EF5115EF24BD00AD0131 /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundManager.m; sourceTree = "<group>"; };
 		BD74EF5815EF333C00AD0131 /* MMMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMoviePlayerViewController.h; sourceTree = "<group>"; };
@@ -411,8 +420,8 @@
 		BD97EE10176D551500A37D07 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
 		BDA159EA1605567200A77235 /* MMURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMURLConnectionOperation.h; sourceTree = "<group>"; };
 		BDA159EB1605567200A77235 /* MMURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMURLConnectionOperation.m; sourceTree = "<group>"; };
-		BDA159EE1605ADAA00A77235 /* MMDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDownloadManager.h; sourceTree = "<group>"; };
-		BDA159EF1605ADAB00A77235 /* MMDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDownloadManager.m; sourceTree = "<group>"; };
+		BDA159EE1605ADAA00A77235 /* MMFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMFileManager.h; sourceTree = "<group>"; };
+		BDA159EF1605ADAB00A77235 /* MMFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMFileManager.m; sourceTree = "<group>"; };
 		BDA5179315E8B53B001979F8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BDA5183F15E8BB69001979F8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		BDC662A315F85D3300DF1C1D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../icon.png; sourceTree = "<group>"; };
@@ -678,6 +687,8 @@
 				BDCF9CED1606BCF20021F14B /* MainStoryboard_iPad.storyboard */,
 				BD49D6D815DF4F46001FD7F4 /* MMListTableViewCell.h */,
 				BD49D6D915DF4F46001FD7F4 /* MMListTableViewCell.m */,
+				BD68C53F176FBB3200558E99 /* MMEpisodeCollectionViewCell.h */,
+				BD68C540176FBB3200558E99 /* MMEpisodeCollectionViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1285,6 +1296,10 @@
 			children = (
 				77E5D27B14E224DB00FAA1A3 /* MMEpisodeListViewController.h */,
 				77E5D27C14E224DB00FAA1A3 /* MMEpisodeListViewController.m */,
+				BD68C539176FB7F500558E99 /* MMEpisodeTableViewController.h */,
+				BD68C53A176FB7F500558E99 /* MMEpisodeTableViewController.m */,
+				BD68C53C176FB9FD00558E99 /* MMEpisodeCollectionViewController.h */,
+				BD68C53D176FB9FD00558E99 /* MMEpisodeCollectionViewController.m */,
 				BD43C21D15DF6B3200D58466 /* MMOverlayViewController.h */,
 				BD43C21E15DF6B3200D58466 /* MMOverlayViewController.m */,
 			);
@@ -1307,8 +1322,8 @@
 				7749D82B14E38B6300B46C1E /* MMMediaViewController.m */,
 				BD74EF5815EF333C00AD0131 /* MMMoviePlayerViewController.h */,
 				BD74EF5915EF333C00AD0131 /* MMMoviePlayerViewController.m */,
-				BDA159EE1605ADAA00A77235 /* MMDownloadManager.h */,
-				BDA159EF1605ADAB00A77235 /* MMDownloadManager.m */,
+				BDA159EE1605ADAA00A77235 /* MMFileManager.h */,
+				BDA159EF1605ADAB00A77235 /* MMFileManager.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1449,7 +1464,7 @@
 				BDCAFFA416001DD4008A99F8 /* MMFilesViewController.m in Sources */,
 				BDCAFFA816001FBF008A99F8 /* MMFileCell.m in Sources */,
 				BDA159EC1605567200A77235 /* MMURLConnectionOperation.m in Sources */,
-				BDA159F01605ADAB00A77235 /* MMDownloadManager.m in Sources */,
+				BDA159F01605ADAB00A77235 /* MMFileManager.m in Sources */,
 				BD00FFC9176B0A960045473A /* MMRegisterViewController.m in Sources */,
 				BD97EE11176D551500A37D07 /* Media.m in Sources */,
 				BD68C37A176FA23600558E99 /* AFHTTPClient.m in Sources */,
@@ -1461,6 +1476,9 @@
 				BD68C380176FA23600558E99 /* AFURLConnectionOperation.m in Sources */,
 				BD68C381176FA23600558E99 /* AFXMLRequestOperation.m in Sources */,
 				BD68C382176FA23600558E99 /* UIImageView+AFNetworking.m in Sources */,
+				BD68C53B176FB7F500558E99 /* MMEpisodeTableViewController.m in Sources */,
+				BD68C53E176FB9FD00558E99 /* MMEpisodeCollectionViewController.m in Sources */,
+				BD68C541176FBB3200558E99 /* MMEpisodeCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

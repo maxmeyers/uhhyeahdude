@@ -74,6 +74,7 @@ static MMMediaDataSource *_sharedDataSource;
             } else if ([media.mediaType isEqualToString:@"SethsCorner"]) {
                 [videos addObject:media];
             }
+            [media checkStatus];
         }
         self.episodes = episodes;
         self.videos = videos;

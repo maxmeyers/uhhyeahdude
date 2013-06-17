@@ -13,13 +13,16 @@
 
 @class Media;
 
-@interface MMDownloadManager : NSObject
+@interface MMFileManager : NSObject
 
-+ (MMDownloadManager *) sharedManager;
++ (MMFileManager *) sharedManager;
 
 - (void) downloadMedia:(Media *)media;
 - (void) cancelDownloadForMedia:(Media *)media;
 - (BOOL) isDownloadingMedia:(Media *)media;
 - (float) progressForMedia:(Media *)media;
+
+- (BOOL) hasFileForMedia:(Media *)media;
+- (void) deleteFileForMedia:(Media *)media;
 
 @end

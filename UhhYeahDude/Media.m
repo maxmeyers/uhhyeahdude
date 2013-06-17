@@ -15,7 +15,6 @@
 @dynamic date;
 @dynamic desc;
 @dynamic duration;
-@dynamic shortTitle;
 @dynamic title;
 @dynamic url;
 @dynamic mediaId;
@@ -24,34 +23,16 @@
 @dynamic imageUrl;
 @dynamic thumbUrl;
 
-@synthesize playStatus, image, fileStatus;
+@synthesize playStatus, image;
 
 + (NSString *)parseClassName {
     return @"Media";
 }
 
-- (void) setObject:(id)object forKey:(NSString *)key {
-    if ([key isEqualToString:@"url"]) {
-        NSLog(@"url");
-    }
-    [super setObject:object forKey:key];
+- (void) checkStatus
+{
+    self.playbackTime = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"%@_%@", PLAYBACK_TIME_KEY, self.fileName]];
 }
-
-//- (void) setUrl:(NSString *)url
-//{
-//    dispatch_async(dispatch_queue_create("file_checker", NULL), ^{
-//        NSString *path = [self localFilePath];
-//        if (path) {
-//            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-//                self.fileStatus = Available;
-//            } else {
-//                self.fileStatus = NotAvailable;
-//            }
-//        }
-//    });
-//    
-//    self.playbackTime = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"%@_%@", PLAYBACK_TIME_KEY, self.fileName]];
-//}
 
 - (int) componentLength
 {
@@ -95,16 +76,6 @@
     return 0;
 }
 
-- (NSString *) fileExtension
-{
-    if ([self.mediaType isEqualToString:@"Episode"]) {
-        return @"jpg";
-    } else if ([self.mediaType isEqualToString:@"SethsCorner"]) {
-        return @"png";
-    }
-    return @"";
-}
-
 - (NSString *) fileName
 {
     return [self.url lastPathComponent];
@@ -114,7 +85,6 @@
 {
     return [self.imageUrl lastPathComponent];
 }
-
 
 - (NSString *) localFilePath
 {

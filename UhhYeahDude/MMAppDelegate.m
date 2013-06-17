@@ -26,7 +26,6 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:IMAGES_DIRECTORY]) {
         NSError *error;
         [[NSFileManager defaultManager] copyItemAtPath:[NSString stringWithFormat:@"%@/images/", [[NSBundle mainBundle] resourcePath]] toPath:IMAGES_DIRECTORY error:&error];
-//        [[NSFileManager defaultManager] createDirectoryAtPath:IMAGES_DIRECTORY withIntermediateDirectories:YES attributes:nil error:&error];
     }
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:MEDIA_DIRECTORY]) {
@@ -49,10 +48,6 @@
     
     // Override point for customization after application launch.
     [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyCacheThenNetwork];
-
-    
-//    [[MMVideoDataSource sharedDataSource] setSections:[NSKeyedUnarchiver unarchiveObjectWithFile:VIDEOS_BIN]];
-//    [[MMVideoDataSource sharedDataSource] load];
     
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     
@@ -80,11 +75,10 @@
     // Updates the device token and registers the token with UA
     [[UAPush shared] registerDeviceToken:deviceToken];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:PUSH_ENABLED_KEY];
-    NSLog(@"we have liftoff");
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"Couldn't register");
+
 }
 
 static NSString *_applicationDocumentsDirectory = nil;
