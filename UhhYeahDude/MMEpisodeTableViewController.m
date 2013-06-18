@@ -28,6 +28,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [(UITableView*)self.view reloadData];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,6 +127,11 @@
     }
     
     return cell;
+}
+
+- (IBAction)nowPlayingAction:(id)sender
+{
+    [super nowPlayingAction:sender];
 }
 
 @end

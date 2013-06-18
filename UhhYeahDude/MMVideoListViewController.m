@@ -10,18 +10,14 @@
 #import "Media.h"
 #import "MMListTableViewCell.h"
 #import "MMMediaViewController.h"
+#import "MMAppDelegate.h"
 #import "MMMediaDataSource.h"
+
 
 #define VIDEOS [[MMMediaDataSource sharedDataSource] videos]
 
 @implementation MMVideoListViewController
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"VideoListToEpisodeView"]){
-        MMMediaViewController *evc = [segue destinationViewController];
-        evc.media = [sender media];
-    }
-}
 
 - (void)viewDidLoad
 {
@@ -44,6 +40,18 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return VIDEOS ? 2 : 1;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
+    MMMediaViewController *mmvc = [storyboard instantiateViewControllerWithIdentifier:@"MediaView"];
+    mmvc.media = [VIDEOS objectAtIndex:indexPath.row];
+    mmvc.title = mmvc.media.title;
+    [mmvc playNow];
+    
+    NSMutableArray *vcs = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
+    [vcs addObject:MPVC];
+    [self.navigationController setViewControllers:[NSArray arrayWithArray:vcs] animated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -95,15 +103,9 @@
     cell.titleLabel.text = video.title;
     cell.durationLabel.text = video.duration;
     [cell setImage];
+    [cell setDownloadStatus];
     
     return cell;
-}
-
-- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    MMListTableViewCell *cell = [[MMListTableViewCell alloc] init];
-    cell.media = [VIDEOS objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:@"VideoListToEpisodeView" sender:cell];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

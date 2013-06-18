@@ -224,21 +224,6 @@ Developed by @maxmeyers</string>
             </objects>
             <point key="canvasLocation" x="494" y="1296"/>
         </scene>
-        <!--Log In View Controller-->
-        <scene sceneID="wV0-HJ-Ogt">
-            <objects>
-                <viewController id="TRc-qV-eDp" customClass="PFLogInViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ERQ-jN-j1a">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="oGI-Mm-7lP"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tpZ-h1-5GO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="750" y="1943"/>
-        </scene>
         <!--Notifications View Controller-->
         <scene sceneID="qMJ-ws-JR3">
             <objects>
@@ -383,13 +368,18 @@ Developed by @maxmeyers</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.98823529409999999" green="0.94901960780000005" blue="0.87058823529999996" alpha="1" colorSpace="deviceRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VideoCell" rowHeight="120" id="IYA-5O-yE0" customClass="MMListTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VideoCell" rowHeight="120" id="IYA-5O-yE0" customClass="MMListTableViewCell">
                                 <rect key="frame" x="0.0" y="46" width="320" height="121"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="10" y="1" width="267" height="119"/>
+                                    <rect key="frame" x="10" y="1" width="280" height="119"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" id="dhF-jD-h7a">
+                                            <rect key="frame" x="141" y="102" width="139" height="9"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="progressTintColor" red="0.1019607843" green="0.43921568630000002" blue="0.60392156860000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </progressView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="tv.png" id="vyg-Vo-USL">
                                             <rect key="frame" x="6" y="11" width="127" height="100"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -405,6 +395,22 @@ Developed by @maxmeyers</string>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6rf-cT-V24">
+                                            <rect key="frame" x="247" y="49" width="25" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <state key="normal" image="downloadButton.png">
+                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="selected" image="downloadButtonDown.png"/>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="downloadButtonPressed" destination="IYA-5O-yE0" eventType="touchUpInside" id="bIx-uG-ii4"/>
+                                            </connections>
+                                        </button>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="21:24" lineBreakMode="tailTruncation" minimumFontSize="10" id="1FG-qT-WPd">
                                             <rect key="frame" x="141" y="38" width="43" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -417,10 +423,11 @@ Developed by @maxmeyers</string>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
+                                    <outlet property="downloadButton" destination="6rf-cT-V24" id="bFA-UO-KVp"/>
+                                    <outlet property="downloadProgressView" destination="dhF-jD-h7a" id="X0C-hv-3aw"/>
                                     <outlet property="durationLabel" destination="1FG-qT-WPd" id="xh4-9V-c3J"/>
                                     <outlet property="theImageView" destination="qBH-Bp-C5r" id="lNj-ob-UYf"/>
                                     <outlet property="titleLabel" destination="S1y-TC-f5c" id="Hpb-TP-PFa"/>
-                                    <segue destination="Fpw-5p-gxn" kind="push" identifier="VideoListToEpisodeView" id="lm5-yb-nPS"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BlankCell" rowHeight="80" id="FH9-5V-iiH">
@@ -549,54 +556,6 @@ Developed by @maxmeyers</string>
             </objects>
             <point key="canvasLocation" x="1246" y="1199"/>
         </scene>
-        <!--Register View Controller-->
-        <scene sceneID="BQw-mu-jbx">
-            <objects>
-                <viewController id="H0C-Uk-EbL" customClass="MMRegisterViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Jh5-1L-ogy">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="2bI-3z-P39">
-                                <rect key="frame" x="103" y="119" width="97" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="8Lf-gn-or9">
-                                <rect key="frame" x="103" y="181" width="97" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jDe-cB-BPM">
-                                <rect key="frame" x="114" y="239" width="75" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Submit">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="submitButtonPressed:" destination="H0C-Uk-EbL" eventType="touchUpInside" id="gOU-32-Yd6"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Cng-4D-uIz"/>
-                    <connections>
-                        <outlet property="passwordField" destination="8Lf-gn-or9" id="pzO-F1-dyY"/>
-                        <outlet property="usernameField" destination="2bI-3z-P39" id="4ga-IO-UJ1"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h5c-45-meb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1771" y="1213"/>
-        </scene>
         <!--Episode Table View Controller - Episodes-->
         <scene sceneID="PRH-Yw-eZY">
             <objects>
@@ -632,21 +591,21 @@ Developed by @maxmeyers</string>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Episode 335 Aug 9th 2012" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" id="JwQ-tV-zTx">
-                                            <rect key="frame" x="88" y="13" width="116" height="60"/>
+                                            <rect key="frame" x="88" y="13" width="131" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="30m left" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cVN-rN-xS4">
-                                            <rect key="frame" x="206" y="57" width="61" height="21"/>
+                                            <rect key="frame" x="116" y="64" width="61" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VkE-na-Ynf">
-                                            <rect key="frame" x="222" y="30" width="25" height="26"/>
+                                            <rect key="frame" x="235" y="30" width="25" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <state key="normal" image="downloadButton.png">
@@ -661,17 +620,18 @@ Developed by @maxmeyers</string>
                                                 <action selector="downloadButtonPressed" destination="pKM-DI-Utg" eventType="touchUpInside" id="Jcf-Vn-Qx6"/>
                                             </connections>
                                         </button>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" animating="YES" style="gray" id="KUE-yt-5f4">
-                                            <rect key="frame" x="224" y="2" width="20" height="20"/>
+                                        <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" id="cLr-ni-gSk">
+                                            <rect key="frame" x="88" y="7" width="179" height="9"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </activityIndicatorView>
+                                            <color key="progressTintColor" red="0.1019607843" green="0.43921568630000002" blue="0.60392156860000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </progressView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" red="0.72156862749999995" green="0.72156862749999995" blue="0.72156862749999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="downloadButton" destination="VkE-na-Ynf" id="ETR-zh-nHu"/>
-                                    <outlet property="downloadIndicator" destination="KUE-yt-5f4" id="yfP-gK-nrl"/>
+                                    <outlet property="downloadProgressView" destination="cLr-ni-gSk" id="wJz-jr-ffv"/>
                                     <outlet property="theImageView" destination="PBh-rV-9aT" id="kow-EV-1DC"/>
                                     <outlet property="timeLeftLabel" destination="cVN-rN-xS4" id="Jf1-Vx-Edz"/>
                                     <outlet property="titleLabel" destination="JwQ-tV-zTx" id="brb-8U-Ef9"/>
@@ -725,7 +685,11 @@ Developed by @maxmeyers</string>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="" id="nO3-My-Wy4"/>
                     <navigationItem key="navigationItem" title="Episodes" id="pbd-dH-qVy">
-                        <barButtonItem key="rightBarButtonItem" systemItem="play" id="yrS-qx-rP0"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="play" id="yrS-qx-rP0">
+                            <connections>
+                                <action selector="nowPlayingAction:" destination="eD6-en-orf" id="4dm-7a-tOG"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -891,6 +855,9 @@ Developed by @maxmeyers</string>
         </class>
         <class className="MMEpisodeTableViewController" superclassName="MMEpisodeListViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MMEpisodeTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="nowPlayingAction:"/>
+            </relationships>
         </class>
         <class className="MMFilesViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MMFilesViewController.h"/>
@@ -900,7 +867,7 @@ Developed by @maxmeyers</string>
             <relationships>
                 <relationship kind="action" name="downloadButtonPressed"/>
                 <relationship kind="outlet" name="downloadButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="downloadIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="downloadProgressView" candidateClass="UIProgressView"/>
                 <relationship kind="outlet" name="durationLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="frameView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="theImageView" candidateClass="UIImageView"/>
@@ -932,18 +899,8 @@ Developed by @maxmeyers</string>
                 <relationship kind="outlet" name="showSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
-        <class className="MMRegisterViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MMRegisterViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
         <class className="MMVideoListViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MMVideoListViewController.h"/>
-        </class>
-        <class className="PFLogInViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PFLogInViewController.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -952,6 +909,6 @@ Developed by @maxmeyers</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="sKw-lc-Yxb"/>
+        <segue reference="QSM-qE-854"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -10,4 +10,6 @@
 
 @interface MMEpisodeTableViewController : MMEpisodeListViewController <UITableViewDelegate, UITableViewDataSource>
 
+- (IBAction)nowPlayingAction:(id)sender;
+
 @end

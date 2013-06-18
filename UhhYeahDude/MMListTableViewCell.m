@@ -64,6 +64,7 @@
         [[MMFileManager sharedManager] cancelDownloadForMedia:self.media];
         self.downloading = NO;
     } else {
+        self.downloadProgressView.progress = 0.0;
         [[MMFileManager sharedManager] downloadMedia:self.media];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadProgressedForMedia:) name:kDownloadProgressNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadFinishedForMedia:) name:KDownloadFinishedNotification object:nil];
@@ -78,7 +79,8 @@
 - (void) downloadProgressedForMedia:(NSNotification*)notification {
     Media *media = notification.object;
     if (self.media == media) {
-//        float progress = [[MMFileManager sharedManager] progressForMedia:self.media];
+        float progress = [[MMFileManager sharedManager] progressForMedia:self.media];
+        self.downloadProgressView.progress = progress;
     }
 }
 
@@ -92,12 +94,11 @@
 - (void) setDownloading:(BOOL)downloading {
     _downloading = downloading;
     if (downloading) {
-        self.downloadIndicator.hidden = NO;
-        [self.downloadIndicator startAnimating];
+        self.downloadProgressView.hidden = NO;
         [self.downloadButton setImage:[UIImage imageNamed:@"downloadProgressButton.png"] forState:UIControlStateNormal];
         [self.downloadButton setBackgroundImage:[UIImage imageNamed:@"downloadProgressWell.png"] forState:UIControlStateNormal];
     } else {
-        self.downloadIndicator.hidden = YES;
+        self.downloadProgressView.hidden = YES;
         [self.downloadButton setImage:[UIImage imageNamed:@"downloadButton.png"] forState:UIControlStateNormal];
         [self.downloadButton setBackgroundImage:nil forState:UIControlStateNormal];
     }

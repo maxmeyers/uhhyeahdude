@@ -70,6 +70,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    NSLog(@"VIEW WILL APPEAR");
     if ([MPVC media]) {
         self.navigationItem.rightBarButtonItem = self.nowPlayingButton;        
     } else {

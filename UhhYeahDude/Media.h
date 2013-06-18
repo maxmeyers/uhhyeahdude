@@ -43,6 +43,7 @@ enum MMPlayStatus {
 
 - (int) componentLength;
 - (int) durationInSeconds;
+
 - (NSString *) imageName;
 - (NSString *) fileName;
 - (NSString *) localFilePath;

@@ -10,8 +10,6 @@
 #import "MMMediaDataSource.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMoviePlayerViewController.h"
-#import "UAirship.h"
-#import "UAPush.h"
 #import "Appirater.h"
 #import "Media.h"
 
@@ -32,12 +30,6 @@
         NSError *error;
         [[NSFileManager defaultManager] createDirectoryAtPath:MEDIA_DIRECTORY withIntermediateDirectories:YES attributes:nil error:&error];
     }
-
-    self.pushTags = [[NSUserDefaults standardUserDefaults] objectForKey:PUSH_TAGS_KEY];
-    if (!self.pushTags) {
-        self.pushTags = [NSArray arrayWithObject:EPISODE_TAG];
-        [[NSUserDefaults standardUserDefaults] setObject:self.pushTags forKey:PUSH_TAGS_KEY];
-    }
     
     [Appirater setAppId:@"498175623"];
     
@@ -45,6 +37,17 @@
     [Parse setApplicationId:@"8fbBNwG2gvwFskbc3SjlO34qmidJkF3pCVPTuVc0"
                   clientKey:@"TtUjkvcLTzjMIwwS2MiPJMNy7A0RJBF5SeDnvDwJ"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    self.pushTags = [[NSUserDefaults standardUserDefaults] objectForKey:PUSH_TAGS_KEY];
+    if (!self.pushTags) {
+        self.pushTags = [NSArray arrayWithObject:EPISODE_TAG];
+        [[NSUserDefaults standardUserDefaults] setObject:self.pushTags forKey:PUSH_TAGS_KEY];
+    }
+    
+    [application registerForRemoteNotificationTypes:
+     UIRemoteNotificationTypeBadge |
+     UIRemoteNotificationTypeAlert |
+     UIRemoteNotificationTypeSound];
     
     // Override point for customization after application launch.
     [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyCacheThenNetwork];
@@ -59,21 +62,15 @@
     success = [audioSession setActive:YES error:&activationError];
     if (!success) { /* handle the error condition */ }
     
-    //Init Airship launch options
-    NSMutableDictionary *takeOffOptions = [[NSMutableDictionary alloc] init];
-    [takeOffOptions setValue:launchOptions forKey:UAirshipTakeOffOptionsLaunchOptionsKey];
-    
-    // Create Airship singleton that's used to talk to Urban Airship servers.
-    // Please populate AirshipConfig.plist with your info from http://go.urbanairship.com
-    [UAirship takeOff:takeOffOptions];
-    
     return YES;
 }
 
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // Updates the device token and registers the token with UA
-    [[UAPush shared] registerDeviceToken:deviceToken];
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+    
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:PUSH_ENABLED_KEY];
 }
 
@@ -93,16 +90,7 @@ static NSString *_applicationDocumentsDirectory = nil;
 
 -(void) applicationWillEnterForeground:(UIApplication *)application
 {
-    [[UAPush shared]
-     registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-                                         UIRemoteNotificationTypeSound |
-                                         UIRemoteNotificationTypeAlert)];
     [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyCacheThenNetwork];
-}
-
-- (void) applicationWillTerminate:(UIApplication *)application
-{
-    [UAirship land];
 }
 
 - (void) setPushTags:(NSArray *)pushTags
@@ -110,11 +98,9 @@ static NSString *_applicationDocumentsDirectory = nil;
     _pushTags = pushTags;
     if (pushTags) {
         [[NSUserDefaults standardUserDefaults] setObject:pushTags forKey:PUSH_TAGS_KEY];
-        [[UAPush shared] setTags:_pushTags];
-        [[UAPush shared]
-         registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-                                             UIRemoteNotificationTypeSound |
-                                             UIRemoteNotificationTypeAlert)];
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation setChannels:_pushTags];
+        [currentInstallation saveInBackground];
     }
 }
 
