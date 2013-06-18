@@ -33,6 +33,7 @@
 - (UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MMEpisodeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"EpisodeCell" forIndexPath:indexPath];
     cell.media = [EPISODES objectAtIndex:indexPath.row];
+    cell.titleLabel.text = cell.media.title;
     [cell setImage];
     return cell;
 }

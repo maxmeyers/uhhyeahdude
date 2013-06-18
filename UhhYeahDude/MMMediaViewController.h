@@ -32,4 +32,6 @@
 - (IBAction)streamButtonAction:(id)sender;
 - (IBAction)nowPlayingAction:(id)sender;
 
+- (void)playNow;
+
 @end

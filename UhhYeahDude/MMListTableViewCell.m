@@ -9,8 +9,11 @@
 #import "MMListTableViewCell.h"
 #import "Media.h"
 #import "UIImageView+WebCache.h"
+#import "MMFileManager.h"
 
 @implementation MMListTableViewCell
+
+@synthesize downloading = _downloading;
 
 - (void) setImage
 {
@@ -55,4 +58,60 @@
 
     }
 }
+
+- (IBAction)downloadButtonPressed {
+    if (self.downloading) {
+        [[MMFileManager sharedManager] cancelDownloadForMedia:self.media];
+        self.downloading = NO;
+    } else {
+        [[MMFileManager sharedManager] downloadMedia:self.media];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadProgressedForMedia:) name:kDownloadProgressNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadFinishedForMedia:) name:KDownloadFinishedNotification object:nil];
+        self.downloading = YES;
+    }
+}
+
+- (BOOL) downloading {
+    return _downloading;
+}
+
+- (void) downloadProgressedForMedia:(NSNotification*)notification {
+    Media *media = notification.object;
+    if (self.media == media) {
+//        float progress = [[MMFileManager sharedManager] progressForMedia:self.media];
+    }
+}
+
+- (void) downloadFinishedForMedia:(NSNotification*)notification {
+    Media *media = notification.object;
+    if (self.media == media) {
+        [self setDownloadStatus];
+    }
+}
+
+- (void) setDownloading:(BOOL)downloading {
+    _downloading = downloading;
+    if (downloading) {
+        self.downloadIndicator.hidden = NO;
+        [self.downloadIndicator startAnimating];
+        [self.downloadButton setImage:[UIImage imageNamed:@"downloadProgressButton.png"] forState:UIControlStateNormal];
+        [self.downloadButton setBackgroundImage:[UIImage imageNamed:@"downloadProgressWell.png"] forState:UIControlStateNormal];
+    } else {
+        self.downloadIndicator.hidden = YES;
+        [self.downloadButton setImage:[UIImage imageNamed:@"downloadButton.png"] forState:UIControlStateNormal];
+        [self.downloadButton setBackgroundImage:nil forState:UIControlStateNormal];
+    }
+}
+
+- (void) setDownloadStatus {
+    if ([[MMFileManager sharedManager] hasFileForMedia:self.media]) {
+        self.downloadButton.hidden = YES;
+    }
+    if ([[MMFileManager sharedManager] isDownloadingMedia:self.media]) {
+        self.downloading = YES;
+    } else {
+        self.downloading = NO;
+    }
+}
+
 @end

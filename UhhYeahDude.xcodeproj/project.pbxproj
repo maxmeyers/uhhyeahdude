@@ -47,6 +47,14 @@
 		BD68C53B176FB7F500558E99 /* MMEpisodeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C53A176FB7F500558E99 /* MMEpisodeTableViewController.m */; };
 		BD68C53E176FB9FD00558E99 /* MMEpisodeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C53D176FB9FD00558E99 /* MMEpisodeCollectionViewController.m */; };
 		BD68C541176FBB3200558E99 /* MMEpisodeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD68C540176FBB3200558E99 /* MMEpisodeCollectionViewCell.m */; };
+		BD68C547176FCCDB00558E99 /* downloadButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C543176FCCDB00558E99 /* downloadButton.png */; };
+		BD68C548176FCCDB00558E99 /* downloadButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C544176FCCDB00558E99 /* downloadButton@2x.png */; };
+		BD68C549176FCCDB00558E99 /* downloadButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C545176FCCDB00558E99 /* downloadButtonDown.png */; };
+		BD68C54A176FCCDB00558E99 /* downloadButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C546176FCCDB00558E99 /* downloadButtonDown@2x.png */; };
+		BD68C54F176FD18000558E99 /* downloadProgressButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C54B176FD18000558E99 /* downloadProgressButton.png */; };
+		BD68C550176FD18000558E99 /* downloadProgressButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C54C176FD18000558E99 /* downloadProgressButton@2x.png */; };
+		BD68C551176FD18000558E99 /* downloadProgressWell.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C54D176FD18000558E99 /* downloadProgressWell.png */; };
+		BD68C552176FD18000558E99 /* downloadProgressWell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD68C54E176FD18000558E99 /* downloadProgressWell@2x.png */; };
 		BD74EF5215EF24BD00AD0131 /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD74EF5115EF24BD00AD0131 /* SoundManager.m */; };
 		BD74EF5A15EF333C00AD0131 /* MMMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD74EF5915EF333C00AD0131 /* MMMoviePlayerViewController.m */; };
 		BD84C71715FD85E60064218E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BD84C71415FD85DE0064218E /* Reachability.m */; };
@@ -171,6 +179,14 @@
 		BD68C53D176FB9FD00558E99 /* MMEpisodeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMEpisodeCollectionViewController.m; sourceTree = "<group>"; };
 		BD68C53F176FBB3200558E99 /* MMEpisodeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMEpisodeCollectionViewCell.h; sourceTree = "<group>"; };
 		BD68C540176FBB3200558E99 /* MMEpisodeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMEpisodeCollectionViewCell.m; sourceTree = "<group>"; };
+		BD68C543176FCCDB00558E99 /* downloadButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downloadButton.png; sourceTree = "<group>"; };
+		BD68C544176FCCDB00558E99 /* downloadButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "downloadButton@2x.png"; sourceTree = "<group>"; };
+		BD68C545176FCCDB00558E99 /* downloadButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downloadButtonDown.png; sourceTree = "<group>"; };
+		BD68C546176FCCDB00558E99 /* downloadButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "downloadButtonDown@2x.png"; sourceTree = "<group>"; };
+		BD68C54B176FD18000558E99 /* downloadProgressButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downloadProgressButton.png; sourceTree = "<group>"; };
+		BD68C54C176FD18000558E99 /* downloadProgressButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "downloadProgressButton@2x.png"; sourceTree = "<group>"; };
+		BD68C54D176FD18000558E99 /* downloadProgressWell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downloadProgressWell.png; sourceTree = "<group>"; };
+		BD68C54E176FD18000558E99 /* downloadProgressWell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "downloadProgressWell@2x.png"; sourceTree = "<group>"; };
 		BD74EF5015EF24BD00AD0131 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
 		BD74EF5115EF24BD00AD0131 /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundManager.m; sourceTree = "<group>"; };
 		BD74EF5815EF333C00AD0131 /* MMMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMoviePlayerViewController.h; sourceTree = "<group>"; };
@@ -618,6 +634,7 @@
 		BD3AEDB415F2E85D0067A8EB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BD68C542176FCCCA00558E99 /* New Group */,
 				BD3D259E15FD982A00EBFCC2 /* Tab Bar Icons */,
 				BDFED43715FFF2CC00DF5C32 /* ipad.png */,
 				BDFED43815FFF2CC00DF5C32 /* ipad@2x.png */,
@@ -717,6 +734,21 @@
 				BD68C379176FA23600558E99 /* UIImageView+AFNetworking.m */,
 			);
 			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		BD68C542176FCCCA00558E99 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				BD68C54B176FD18000558E99 /* downloadProgressButton.png */,
+				BD68C54C176FD18000558E99 /* downloadProgressButton@2x.png */,
+				BD68C54D176FD18000558E99 /* downloadProgressWell.png */,
+				BD68C54E176FD18000558E99 /* downloadProgressWell@2x.png */,
+				BD68C543176FCCDB00558E99 /* downloadButton.png */,
+				BD68C544176FCCDB00558E99 /* downloadButton@2x.png */,
+				BD68C545176FCCDB00558E99 /* downloadButtonDown.png */,
+				BD68C546176FCCDB00558E99 /* downloadButtonDown@2x.png */,
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		BD74EF4F15EF24BD00AD0131 /* SoundManager */ = {
@@ -1430,6 +1462,14 @@
 				BD2BB40316018BCA0084E1F1 /* Default-568h@2x.png in Resources */,
 				BDCF9CEE1606BCF20021F14B /* MainStoryboard_iPad.storyboard in Resources */,
 				BD68C538176FA3D300558E99 /* images in Resources */,
+				BD68C547176FCCDB00558E99 /* downloadButton.png in Resources */,
+				BD68C548176FCCDB00558E99 /* downloadButton@2x.png in Resources */,
+				BD68C549176FCCDB00558E99 /* downloadButtonDown.png in Resources */,
+				BD68C54A176FCCDB00558E99 /* downloadButtonDown@2x.png in Resources */,
+				BD68C54F176FD18000558E99 /* downloadProgressButton.png in Resources */,
+				BD68C550176FD18000558E99 /* downloadProgressButton@2x.png in Resources */,
+				BD68C551176FD18000558E99 /* downloadProgressWell.png in Resources */,
+				BD68C552176FD18000558E99 /* downloadProgressWell@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

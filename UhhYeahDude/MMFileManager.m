@@ -43,7 +43,6 @@ static MMFileManager *_sharedManager;
 }
 
 - (void) notifyListenersOfDownloadProgress:(float)progress forMedia:(Media *)media  {
-    [self.progress setObject:@(progress) forKey:media.fileName];
     [[NSNotificationCenter defaultCenter] postNotificationName:kDownloadProgressNotification object:media];
 }
 
@@ -57,6 +56,7 @@ static MMFileManager *_sharedManager;
     __weak MMURLConnectionOperation *blockOp = operation;
     [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         float progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
+        [self.progress setObject:@(progress) forKey:media.fileName];
         [self notifyListenersOfDownloadProgress:progress forMedia:media];
     }];
     
@@ -66,11 +66,11 @@ static MMFileManager *_sharedManager;
             [self.fileStatuses setObject:@(YES) forKey:media.fileName];
         }
         
-        [self notifyListenersOfDownloadCompletionForMedia:media];
         [self.downloads removeObjectForKey:media.fileName];
         if (self.downloads.count == 0) {
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         }
+        [self notifyListenersOfDownloadCompletionForMedia:media];
     }];
     [operation start];
     [self.downloads setObject:operation forKey:media.fileName];

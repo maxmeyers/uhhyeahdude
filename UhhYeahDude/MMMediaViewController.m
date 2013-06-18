@@ -91,6 +91,14 @@
     [super viewDidUnload];
 }
 
+- (void)playNow {
+    if (self.downloaded) {
+        [self downloadButtonAction:nil];
+    } else {
+        [self streamButtonAction:nil];
+    }
+}
+
 - (IBAction)downloadButtonAction:(id)sender {
     if (!self.downloading && !self.downloaded) {
         [[MMFileManager sharedManager] downloadMedia:self.media];
@@ -98,7 +106,7 @@
         self.downloading = YES;
     } else if (self.downloaded) {
         NSURL *path = [NSURL fileURLWithPath:[self.media localFilePath]];
-        [self playMediaWithURL:path];
+        [self playMediaWithURL:path pushView:YES];
     }
 }
 
@@ -106,10 +114,10 @@
     if (self.downloading) {
         [[MMFileManager sharedManager] cancelDownloadForMedia:self.media];
     }
-    [self playMediaWithURL:[NSURL URLWithString:self.media.url]];
+    [self playMediaWithURL:[NSURL URLWithString:self.media.url] pushView:YES];
 }
 
-- (void)playMediaWithURL:(NSURL *)url
+- (void)playMediaWithURL:(NSURL *)url pushView:(BOOL)push
 {
     if (MPVC.media != self.media) {
         MMMoviePlayerViewController *mpvc = [[MMMoviePlayerViewController alloc] initWithContentURL:url];
@@ -120,7 +128,10 @@
         [(MMAppDelegate *)[[UIApplication sharedApplication] delegate] setMpvc:mpvc];
         [[mpvc moviePlayer] setControlStyle:MPMovieControlStyleDefault];
     }
-    [[self navigationController] pushViewController:MPVC animated:YES];
+    
+    if (push) {
+        [[self navigationController] pushViewController:MPVC animated:YES];
+    }
 }
 
 - (IBAction)nowPlayingAction:(id)sender {
@@ -146,14 +157,18 @@
 - (void) downloadProgressForMedia:(NSNotification *)notification
 {
     Media *media = notification.object;
-    self.downloadProgressView.progress = [[MMFileManager sharedManager] progressForMedia:media];
+    if (self.media == media) {
+        self.downloadProgressView.progress = [[MMFileManager sharedManager] progressForMedia:media];
+    }
 }
 
 - (void) downloadFinishedForMedia:(NSNotification *)notification
 {
     Media *media = notification.object;
-    self.downloading = NO;
-    self.downloaded = [[MMFileManager sharedManager] hasFileForMedia:media];
+    if (self.media == media) {
+        self.downloading = NO;
+        self.downloaded = [[MMFileManager sharedManager] hasFileForMedia:media];
+    }
 }
 
 - (void) setDownloading:(BOOL)downloading

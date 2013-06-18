@@ -14,6 +14,7 @@
 
 @property (weak) Media *media;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 
 - (void) setImage;
 

@@ -9,6 +9,9 @@
 #import "MMEpisodeTableViewController.h"
 #import "MMListTableViewCell.h"
 #import "Media.h"
+#import "MMFileManager.h"
+#import "MMMediaViewController.h"
+#import "MMAppDelegate.h"
 
 @interface MMEpisodeTableViewController ()
 
@@ -22,10 +25,32 @@
 	// Do any additional setup after loading the view.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [(UITableView*)self.view reloadData];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
+    MMMediaViewController *mmvc = [storyboard instantiateViewControllerWithIdentifier:@"MediaView"];
+    mmvc.media = [EPISODES objectAtIndex:indexPath.row];
+    mmvc.title = mmvc.media.title;
+    [mmvc playNow];
+    
+    NSMutableArray *vcs = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
+    [vcs addObject:mmvc];
+    [vcs addObject:MPVC];
+    [self.navigationController setViewControllers:[NSArray arrayWithArray:vcs] animated:YES];
 }
 
 #pragma  mark -
@@ -60,6 +85,7 @@
     }
     
     MMListTableViewCell *cell = (MMListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    cell.downloadButton.hidden = NO;
     
     if (indexPath.row % 2 == 0) {
         cell.backgroundColor = [UIColor colorWithRed:184/255.0 green:184/255.0 blue:184/255.0 alpha:1.0];
@@ -96,6 +122,7 @@
         }
         
         [cell setImage];
+        [cell setDownloadStatus];
     }
     
     return cell;
