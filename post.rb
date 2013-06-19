@@ -1,27 +1,9 @@
-require 'net/http'
-require 'net/https'
-require 'json'
-require 'hmac-sha1'
-require 'base64'
-require 'CGI'
+require 'aws/s3'
+include AWS::S3
 
-uri = URI.parse("https://api.parse.com/1/classes/Media")
+AWS::S3::Base.establish_connection!(
+  :access_key_id     => 'AKIAJIIBLPNSSKSEWS5A',
+  :secret_access_key => '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'
+)
 
-http = Net::HTTP.new(uri.host, uri.port)
-http.use_ssl = true
-http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-uri.query = URI.encode_www_form(:limit => 1000)
-req = Net::HTTP::Get.new(uri.request_uri)
-req["Content-Type"] = "application/json"
-req["X-Parse-Application-Id"] = "8fbBNwG2gvwFskbc3SjlO34qmidJkF3pCVPTuVc0"
-req["X-Parse-REST-API-Key"] = "qNgE46H7emOYu3wsuRLGpMSZVeNxCUfCP81hFSxz"
-
-res = http.request(req)
-currentEpisodes = JSON.parse(res.body)["results"]
-
-titles = {}
-currentEpisodes.each do |episode| 
-	# titles[episode["title"]] = true;
-	puts episode["title"]
-end
+S3Object.store('update', Time.now.to_i.to_s, 'uhhyeahdude', :access => :public_read)

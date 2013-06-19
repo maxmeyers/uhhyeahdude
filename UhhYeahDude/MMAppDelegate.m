@@ -12,6 +12,7 @@
 #import "MMMoviePlayerViewController.h"
 #import "Appirater.h"
 #import "Media.h"
+#import "AFNetworking/AFNetworking.h"
 
 #import <Parse/Parse.h>
 
@@ -30,6 +31,7 @@
         NSError *error;
         [[NSFileManager defaultManager] createDirectoryAtPath:MEDIA_DIRECTORY withIntermediateDirectories:YES attributes:nil error:&error];
     }
+
     
     [Appirater setAppId:@"498175623"];
     
@@ -49,8 +51,37 @@
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
     
-    // Override point for customization after application launch.
-    [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyCacheThenNetwork];
+    PFCachePolicy initialPolicy = kPFCachePolicyCacheOnly;
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:LAST_UPDATE_KEY] == 0) {
+        initialPolicy = kPFCachePolicyNetworkOnly;
+    }
+    [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:initialPolicy];
+    
+    AFURLConnectionOperation *op = [[AFURLConnectionOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://uhhyeahdude.s3.amazonaws.com/update"] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:100]];
+    __weak AFURLConnectionOperation *weakOp = op;
+    [op setCompletionBlock:^{
+        NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
+        [nf setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSNumber *num = [nf numberFromString:weakOp.responseString];
+        if (num) {
+            NSInteger lastUpdate = num.integerValue;
+            NSInteger previousLastUpdate = [[NSUserDefaults standardUserDefaults] integerForKey:LAST_UPDATE_KEY];
+
+            [[NSUserDefaults standardUserDefaults] setInteger:lastUpdate forKey:LAST_UPDATE_KEY];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            if (lastUpdate > previousLastUpdate
+                && previousLastUpdate != 0) { // If it were 0, we already would have done network-only earlier
+                NSLog(@"There has been an update!");
+                [[MMMediaDataSource sharedDataSource] loadWithCachePolicy:kPFCachePolicyNetworkOnly];
+            } else {
+                NSLog(@"No update this time.");
+            }
+        }
+
+    }];
+    [op start];
+    
     
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     
@@ -61,6 +92,9 @@
     NSError *activationError = nil;
     success = [audioSession setActive:YES error:&activationError];
     if (!success) { /* handle the error condition */ }
+    
+    
+
     
     return YES;
 }

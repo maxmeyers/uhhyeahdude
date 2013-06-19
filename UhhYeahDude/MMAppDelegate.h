@@ -21,6 +21,8 @@
 #define IMAGES_DIRECTORY [NSString stringWithFormat:@"%@/images", [MMAppDelegate applicationDocumentsDirectory]]
 #define MEDIA_DIRECTORY [NSString stringWithFormat:@"%@/media", [MMAppDelegate applicationDocumentsDirectory]]
 
+#define LAST_UPDATE_KEY @"LastUpdateKey"
+
 @class MMMoviePlayerViewController, Media;
 
 @interface MMAppDelegate : UIResponder <UIApplicationDelegate>

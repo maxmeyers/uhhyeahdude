@@ -15,7 +15,6 @@
 #import "MMAppDelegate.h"
 #import "UIImageView+WebCache.h"
 #import "Media.h"
-#import <Parse/Parse.h>
 
 @implementation MMEpisodeListViewController
 @synthesize searchBar;
@@ -70,7 +69,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"VIEW WILL APPEAR");
     if ([MPVC media]) {
         self.navigationItem.rightBarButtonItem = self.nowPlayingButton;        
     } else {

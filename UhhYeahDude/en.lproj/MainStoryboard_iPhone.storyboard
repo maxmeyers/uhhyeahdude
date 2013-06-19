@@ -591,7 +591,7 @@ Developed by @maxmeyers</string>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Episode 335 Aug 9th 2012" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" id="JwQ-tV-zTx">
-                                            <rect key="frame" x="88" y="13" width="131" height="60"/>
+                                            <rect key="frame" x="88" y="13" width="116" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
