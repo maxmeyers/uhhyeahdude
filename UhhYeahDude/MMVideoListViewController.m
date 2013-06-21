@@ -9,10 +9,10 @@
 #import "MMVideoListViewController.h"
 #import "Media.h"
 #import "MMListTableViewCell.h"
-#import "MMMediaViewController.h"
+#import "MMEpisodeViewController.h"
 #import "MMAppDelegate.h"
 #import "MMMediaDataSource.h"
-
+#import "UIImageView+LocalFirst.h"
 
 #define VIDEOS [[MMMediaDataSource sharedDataSource] videos]
 
@@ -44,7 +44,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
-    MMMediaViewController *mmvc = [storyboard instantiateViewControllerWithIdentifier:@"MediaView"];
+    MMEpisodeViewController *mmvc = [storyboard instantiateViewControllerWithIdentifier:@"MediaView"];
     mmvc.media = [VIDEOS objectAtIndex:indexPath.row];
     mmvc.title = mmvc.media.title;
     [mmvc playNow];
@@ -102,20 +102,14 @@
     
     cell.titleLabel.text = video.title;
     cell.durationLabel.text = video.duration;
-    [cell setImage];
+    [cell.theImageView setImageWithURL:[NSURL URLWithString:cell.media.thumbUrl] placeHolderImage:[UIImage imageNamed:@"defaultEpisode_thumb.png"] butTryLocalPathFirst:cell.media.localThumbnailFilePath];
     [cell setDownloadStatus];
     
     return cell;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end

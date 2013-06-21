@@ -10,8 +10,10 @@
 #import "MMListTableViewCell.h"
 #import "Media.h"
 #import "MMFileManager.h"
-#import "MMMediaViewController.h"
+#import "MMEpisodeViewController.h"
 #import "MMAppDelegate.h"
+#import "UIImageView+LocalFirst.h"
+#import "UIImageView+WebCache.h"
 
 @interface MMEpisodeTableViewController ()
 
@@ -19,31 +21,9 @@
 
 @implementation MMEpisodeTableViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [(UITableView*)self.view reloadData];
-    [super viewWillAppear:animated];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
-    MMMediaViewController *mmvc = [storyboard instantiateViewControllerWithIdentifier:@"MediaView"];
+    MMEpisodeViewController *mmvc = [storyboard instantiateViewControllerWithIdentifier:@"MediaView"];
     mmvc.media = [EPISODES objectAtIndex:indexPath.row];
     mmvc.title = mmvc.media.title;
     [mmvc playNow];
@@ -52,6 +32,15 @@
     [vcs addObject:mmvc];
     [vcs addObject:MPVC];
     [self.navigationController setViewControllers:[NSArray arrayWithArray:vcs] animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"EpisodeListToEpisodeView"]){
+        MMEpisodeViewController *evc = [segue destinationViewController];
+        NSLog(@"episode view %@", evc);
+        evc.media = [sender media];
+    }
 }
 
 #pragma  mark -
@@ -87,6 +76,10 @@
     
     MMListTableViewCell *cell = (MMListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.downloadButton.hidden = NO;
+    cell.downloadProgressView.hidden = YES;
+
+    [[NSNotificationCenter defaultCenter] addObserver:cell selector:@selector(downloadProgressedForMedia:) name:kDownloadProgressNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:cell selector:@selector(downloadFinishedForMedia:) name:KDownloadFinishedNotification object:nil];
     
     if (indexPath.row % 2 == 0) {
         cell.backgroundColor = [UIColor colorWithRed:184/255.0 green:184/255.0 blue:184/255.0 alpha:1.0];
@@ -122,11 +115,16 @@
             cell.timeLeftLabel.text = nil;
         }
         
-        [cell setImage];
+        [cell.theImageView setImageWithURL:[NSURL URLWithString:cell.media.thumbUrl] placeHolderImage:[UIImage imageNamed:@"defaultEpisode_thumb.png"] butTryLocalPathFirst:cell.media.localThumbnailFilePath];
         [cell setDownloadStatus];
     }
     
     return cell;
+}
+
+
+- (NSUInteger) supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (IBAction)nowPlayingAction:(id)sender

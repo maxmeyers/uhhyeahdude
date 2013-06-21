@@ -7,7 +7,7 @@
 //
 
 #import "MMEpisodeListViewController.h"
-#import "MMMediaViewController.h"
+#import "MMEpisodeViewController.h"
 #import "MMMediaDataSource.h"
 #import "MMOverlayViewController.h"
 #import "MMListTableViewCell.h"
@@ -20,13 +20,6 @@
 @synthesize searchBar;
 
 #pragma mark - View lifecycle
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"EpisodeListToEpisodeView"]){
-        MMMediaViewController *evc = [segue destinationViewController];
-        evc.media = [sender media];
-    }
-}
 
 - (void)viewDidLoad
 {

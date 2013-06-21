@@ -20,19 +20,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "UhhYeahDude/MMMediaViewController.m"
-         timestampString = "393218116.618519"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "165"
-         endingLineNumber = "165"
-         landmarkName = "-downloadFinishedForMedia:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "UhhYeahDude/MMEpisodeCollectionViewController.m"
          timestampString = "393200506.542106"
          startingColumnNumber = "9223372036854775807"
@@ -73,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "UhhYeahDude/MMEpisodeTableViewController.m"
-         timestampString = "393219938.13721"
+         timestampString = "393545796.485191"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "75"
-         endingLineNumber = "75"
+         startingLineNumber = "64"
+         endingLineNumber = "64"
          landmarkName = "-tableView:numberOfRowsInSection:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "UhhYeahDude/MMEpisodeListViewController.m"
-         timestampString = "393315619.342321"
+         timestampString = "393545086.117939"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "169"
-         endingLineNumber = "169"
+         startingLineNumber = "162"
+         endingLineNumber = "162"
          landmarkName = "-nowPlayingAction:"
          landmarkType = "5">
       </FileBreakpoint>

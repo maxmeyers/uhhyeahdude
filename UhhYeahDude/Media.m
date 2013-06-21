@@ -22,6 +22,8 @@
 @dynamic mediaType;
 @dynamic imageUrl;
 @dynamic thumbUrl;
+@dynamic notes;
+@dynamic links;
 
 @synthesize playStatus, image;
 

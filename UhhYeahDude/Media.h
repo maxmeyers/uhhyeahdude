@@ -35,6 +35,8 @@ enum MMPlayStatus {
 @property (nonatomic, retain) NSString * mediaType;
 @property (nonatomic, retain) NSString * imageUrl;
 @property (nonatomic, retain) NSString * thumbUrl;
+@property (nonatomic, retain) NSString * notes;
+@property (nonatomic, retain) NSArray * links;
 
 @property (nonatomic) int16_t playbackTime;
 @property (nonatomic) enum MMPlayStatus playStatus;
