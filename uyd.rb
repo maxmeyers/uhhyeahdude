@@ -5,6 +5,8 @@ require 'aws/s3'
 require 'taglib'
 require 'RMagick'
 
+# these credentials have been revoked
+
 include AWS::S3
 AWS::S3::Base.establish_connection!(
   :access_key_id     => 'AKIAJIIBLPNSSKSEWS5A',
